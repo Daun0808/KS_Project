@@ -20,7 +20,7 @@
                 // 검색어 필터링
                 let matchesSearch = floor.includes(floorInput) && name.includes(nameInput);
 
-                // 체크박스 필터링 (showOnlyActive가 true이면 'N'인 것만 표시)
+                // 삭제 여부 필터링 (showOnlyActive가 true이면 'N'인 것만 표시)
                 let matchesDelStatus = !showOnlyActive || delStatus === "N";
 
                 if (matchesSearch && matchesDelStatus) {
@@ -30,6 +30,7 @@
                 }
             });
         }
+
         window.onload = function() {
             document.getElementById("showActive").checked = true; // 체크박스 기본 체크 상태 유지
             filterTable(); // 삭제된 항목 숨기기
@@ -50,7 +51,7 @@
         <div class="col-md-3">
             <div class="form-check">
                 <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
-                <label for="showActive" class="form-check-label">삭제되지 않은 프린터만 보기</label>
+                <label for="showActive" class="form-check-label">폐기 안된 프린터만 보기</label>
             </div>
         </div>
         <div class="col-md-3 text-end">
@@ -69,7 +70,7 @@
             <th>프린터 이름</th>
             <th>IP</th>
             <th>배치일</th>
-            <th>삭제 여부</th>
+            <th>폐기 여부</th>
         </tr>
         </thead>
         <tbody>
@@ -79,12 +80,12 @@
             <td th:text="${printer.printPlace}">설치 장소</td>
             <td>
                 <a th:href="@{/printer/{printer_id}(printer_id=${printer.printerId})}">
-                    <span th:text="${printer.printName}">프린터 이름</span>
+                    <span th:text="${printer.printCode}">프린터 이름</span>
                 </a>
             </td>
             <td th:text="${printer.printIp}">IP 주소</td>
             <td th:text="${printer.printPlaceDate}">배치일</td>
-            <td th:text="${printer.printDel}">삭제여부</td>
+            <td th:text="${printer.printDel}">폐기여부</td>
         </tr>
         </tbody>
     </table>
