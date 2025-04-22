@@ -37,7 +37,7 @@ public record CreatePrinter(
         @NotBlank @Size(max = 20)
         String printUniqueNumber,
 
-        @NotBlank @Size(max = 15)
+        @Size(max = 15)
         String printIp,
 
         @Size(max = 20)
@@ -55,6 +55,6 @@ public record CreatePrinter(
         String del,
 
         @NotNull
-        Department department
+        String departmentId
 ) {
 }
