@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Department</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-4">
+  <h2>부서 수정</h2>
+
+  <!-- 부서 정보 수정 폼 -->
+  <form th:action="@{/department/update/{department_id}(department_id=${department_id})}" method="post">
+    <div class="mb-3">
+      <label for="departmentName" class="form-label">부서 이름</label>
+      <input type="text" id="departmentName" name="department_name" class="form-control"
+             maxlength="15" th:value="${department.getDepartmentName()}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="departmentFloor" class="form-label">층</label>
+      <input type="text" id="departmentFloor" name="department_floor" class="form-control"
+             maxlength="5" th:value="${department.getDepartmentFloor()}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="deleteStatus" class="form-label">삭제 상태 ( N / Y [삭제] )</label>
+      <input type="text" id="deleteStatus" name="delete" class="form-control"
+             maxlength="1" pattern="[NY]" th:value="${department.getDelete()}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">수정</button>
+
+    <a th:href="@{/department/{department_id}(department_id=${department_id})}"
+       class="btn btn-secondary">돌아가기</a>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
