@@ -9,16 +9,18 @@
         function filterTable() {
             let floorInput = document.getElementById("floorSearch").value.toLowerCase();
             let nameInput = document.getElementById("nameSearch").value.toLowerCase();
+            let uniqueNumberInput = document.getElementById("uniqueNumberSearch").value.toLowerCase();
             let showOnlyActive = document.getElementById("showActive").checked;
             let tableRows = document.querySelectorAll("tbody tr");
 
             tableRows.forEach(row => {
                 let floor = row.children[0].innerText.toLowerCase();
                 let name = row.children[1].innerText.toLowerCase();
+                let uniqueNumber = row.children[3].innerText.toLowerCase(); // 프린터 고유 번호가 있는 열
                 let delStatus = row.getAttribute("data-del"); // data-del 속성 가져오기
 
                 // 검색어 필터링
-                let matchesSearch = floor.includes(floorInput) && name.includes(nameInput);
+                let matchesSearch = floor.includes(floorInput) && name.includes(nameInput) && uniqueNumber.includes(uniqueNumberInput);
 
                 // 삭제 여부 필터링 (showOnlyActive가 true이면 'N'인 것만 표시)
                 let matchesDelStatus = !showOnlyActive || delStatus === "N";
@@ -36,17 +38,62 @@
             filterTable(); // 삭제된 항목 숨기기
         };
     </script>
+    <style>
+        /* 상단 고정 메뉴바 스타일 */
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* 메뉴바가 다른 요소들보다 위에 표시되도록 */
+            background-color: #f8f9fa; /* 밝은 배경 */
+            padding: 5px 20px; /* 메뉴바 높이 조정 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 메뉴바에 그림자 추가 */
+        }
+
+        .navbar-btn {
+            font-size: 1rem; /* 버튼 크기 조정 */
+            margin-right: 15px; /* 버튼들 간의 간격 */
+        }
+
+        /* 페이지 내용이 메뉴바와 겹치지 않도록 여백 추가 */
+        body {
+            padding-top: 60px; /* 메뉴바 높이에 맞춰 페이지 내용이 겹치지 않도록 여백 추가 */
+        }
+    </style>
 </head>
 <body>
+<!-- 상단 고정 메뉴바 -->
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <!-- 왼쪽 버튼 (홈 버튼) -->
+        <a href="/" class="btn btn-outline-primary navbar-btn">
+            홈
+        </a>
+
+        <!-- 부서 관리 버튼 -->
+        <a href="/department" class="btn btn-outline-success navbar-btn">
+            부서 관리
+        </a>
+
+        <!-- 프린터 관리 버튼 -->
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">
+            프린터 관리
+        </a>
+    </div>
+</div>
 <div class="container mt-5">
     <h2 class="text-center mb-4">프린터 목록</h2>
 
     <div class="row mb-3">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="text" id="floorSearch" class="form-control" placeholder="층 검색" onkeyup="filterTable()">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색" onkeyup="filterTable()">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="uniqueNumberSearch" class="form-control" placeholder="프린터 고유 번호 검색" onkeyup="filterTable()">
         </div>
         <div class="col-md-3">
             <div class="form-check">

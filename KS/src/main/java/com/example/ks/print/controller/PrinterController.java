@@ -6,12 +6,15 @@ import com.example.ks.print.domain.Printer;
 import com.example.ks.print.dto.CreatePrinter;
 import com.example.ks.print.dto.UpdatePrinter;
 import com.example.ks.print.service.PrinterService;
+import com.example.ks.printHistory.dto.CreatePrinterHistory;
+import com.example.ks.printHistory.service.PrinterHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -20,6 +23,7 @@ import java.util.List;
 public class PrinterController {
     private final DepartmentService departmentService;
     private final PrinterService printerService;
+    private final PrinterHistoryService printerHistoryService;
 
     @GetMapping("/printer")
     public ModelAndView printer() {
@@ -85,8 +89,31 @@ public class PrinterController {
 
     @PostMapping("/printer/update")
     public String updatePrinter(@Valid @ModelAttribute UpdatePrinter updatePrinter) {
-        printerService.update(updatePrinter);
+        // 기존 프린터 정보
+        Printer existingPrinter = printerService.findByPrinterId(updatePrinter.printerId());
+        String currentDepartmentId = String.valueOf(existingPrinter.getDepartment().getDepartmentId());
 
+        // 부서가 변경된 경우에만 히스토리 기록
+        if (!currentDepartmentId.equals(updatePrinter.departmentId())) {
+            // 부서 이름 조회 (departmentService를 통해)
+            Department beforeDept = existingPrinter.getDepartment();
+            Department afterDept = departmentService.findById(Integer.parseInt(updatePrinter.departmentId()));
+
+            CreatePrinterHistory historyDto = CreatePrinterHistory.builder()
+                    .departmentBeforeName(beforeDept.getDepartmentName())
+                    .departmentNewName(afterDept.getDepartmentName())
+                    .printAfterDate(LocalDate.now())
+                    .printText("부서 변경에 따른 이력 자동 생성")
+                    .printRepair(null)  // 수리 내역은 없음
+                    .printRepairDate(null)
+                    .historyTag("부서 변경")
+                    .del("N")
+                    .printerId(updatePrinter.printerId())
+                    .build();
+
+            printerHistoryService.CreatePrinterHistory(historyDto);
+        }
+        printerService.update(updatePrinter);
         return "redirect:/printer/" + updatePrinter.printerId(); // 수정 후 상세 페이지로 이동
     }
 
