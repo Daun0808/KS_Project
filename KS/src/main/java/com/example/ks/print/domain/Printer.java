@@ -2,6 +2,7 @@ package com.example.ks.print.domain;
 
 import com.example.ks.department.domain.Department;
 import com.example.ks.print.dto.CreatePrinter;
+import com.example.ks.print.dto.UpdatePrinter;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -128,4 +129,24 @@ public class Printer {
                 .department(department)
                 .build();
     }
+
+    public void Update(UpdatePrinter updatePrinter, Department department) {
+        this.printPlace = updatePrinter.printPlace();
+        this.printPlaceDate = updatePrinter.printPlaceDate();
+        this.printName = updatePrinter.printName();
+        this.printCode = updatePrinter.printCode();
+        this.printColor = updatePrinter.printColor();
+        this.printProductDate = updatePrinter.printProductDate();
+        this.printBuyDate = updatePrinter.printBuyDate();
+        this.printSerialNumber = updatePrinter.printSerialNumber();
+        this.printUniqueNumber = updatePrinter.printUniqueNumber();
+        this.printIp = updatePrinter.printIp();
+        this.printText = updatePrinter.printText();
+        this.printDel = updatePrinter.printDel();
+        this.printDelDate = updatePrinter.printDelDate();
+        this.printDelText = updatePrinter.printDelText();
+        this.del = updatePrinter.del();
+        this.department = department;
+    }
+
 }
