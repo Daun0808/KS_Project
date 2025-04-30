@@ -16,7 +16,7 @@
             tableRows.forEach(row => {
                 let floor = row.children[0].innerText.toLowerCase();
                 let name = row.children[1].innerText.toLowerCase();
-                let uniqueNumber = row.children[3].innerText.toLowerCase(); // 프린터 고유 번호가 있는 열
+                let uniqueNumber = row.children[4].innerText.toLowerCase(); // 프린터 고유 번호가 있는 열
                 let delStatus = row.getAttribute("data-del"); // data-del 속성 가져오기
 
                 // 검색어 필터링
@@ -116,9 +116,11 @@
             <th>부서</th>
             <th>설치 장소</th>
             <th>프린터 이름</th>
+            <th>원내 고유 번호</th>
             <th>IP</th>
             <th>배치일</th>
             <th>폐기 여부</th>
+            <th>비고</th>
         </tr>
         </thead>
         <tbody>
@@ -131,9 +133,11 @@
                     <span th:text="${printer.printCode}">프린터 이름</span>
                 </a>
             </td>
+            <td th:text="${printer.getPrintUniqueNumber()}">원내 고유 번호</td>
             <td th:text="${printer.printIp}">IP 주소</td>
             <td th:text="${printer.printPlaceDate}">배치일</td>
             <td th:text="${printer.printDel}">폐기여부</td>
+            <td th:text="${printer.printText}">비고</td>
         </tr>
         </tbody>
     </table>
