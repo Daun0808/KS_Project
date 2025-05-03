@@ -8,6 +8,7 @@ import com.example.ks.print.dto.UpdatePrinter;
 import com.example.ks.print.service.PrinterService;
 import com.example.ks.printHistory.dto.CreatePrinterHistory;
 import com.example.ks.printHistory.service.PrinterHistoryService;
+import com.example.ks.printerToner.service.PrinterTonerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,6 +26,7 @@ public class PrinterController {
     private final DepartmentService departmentService;
     private final PrinterService printerService;
     private final PrinterHistoryService printerHistoryService;
+    private final PrinterTonerService printerTonerService;
 
     @GetMapping("/printer")
     public ModelAndView printer() {
@@ -32,8 +35,13 @@ public class PrinterController {
                 .stream()
                 .filter(printer -> !"Y".equals(printer.getDel())) // del이 "Y"인 것 제외
                 .toList(); // 필터링된 프린터 리스트
+        ArrayList<String> tonerName = new ArrayList<>();
+        for (Printer printer : printers) {
+            tonerName.add(printerTonerService.printToner(printer.getPrintCode()));
 
+        }
         modelAndView.addObject("printers", printers);
+        modelAndView.addObject("tonerName", tonerName);
         return modelAndView;
     }
 
