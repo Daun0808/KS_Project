@@ -41,6 +41,23 @@ public class TonerHistoryController {
         return modelAndView;
     }
 
+    @GetMapping("/month/{toner_name}/history")
+    public ModelAndView findAllByToner_TonerName(@PathVariable("toner_name") String tonerName) {
+        ModelAndView modelAndView = new ModelAndView("tonerHistory");
+
+        // 토너 기본 정보 조회
+        Toner toner = tonerService.findByTonerName(tonerName);
+
+        // 해당 토너의 모든 히스토리 조회
+        List<TonerHistory> tonerHistory = tonerHistoryService.findByToner_TonerId(toner.getTonerId()).stream()
+                .filter(tonerHistory1 -> "N".equals(tonerHistory1.getDel())).toList();
+
+        modelAndView.addObject("toner", toner);
+        modelAndView.addObject("history", tonerHistory);
+
+        return modelAndView;
+    }
+
     // 새로운 토너 히스토리 생성 폼
     @GetMapping("/{toner_id}/history/create")
     public ModelAndView createTonerHistoryForm(@PathVariable("toner_id") Integer tonerId) {
@@ -58,16 +75,6 @@ public class TonerHistoryController {
     public String createTonerHistory(@Valid @ModelAttribute("createTonerHistory") CreateTonerHistory dto,
                                      @PathVariable("toner_id") int tonerId) {
         tonerHistoryService.createTonerHistory(dto);
-        if (dto.historyReceived() > 0) {
-            Toner toner = tonerService.findByTonerId(tonerId);
-            tonerService.tonerQuantity(tonerId,toner.getTonerQuantity()+dto.historyReceived());
-
-        } else if (dto.historyDelivery() > 0) {
-            Toner toner = tonerService.findByTonerId(tonerId);
-            tonerService.tonerQuantity(tonerId,toner.getTonerQuantity()-dto.historyDelivery());
-        } else {
-            throw new RuntimeException("입고 및 출고 입력값 오류");
-        }
         return "redirect:/toner/" + tonerId + "/history";
     }
 
