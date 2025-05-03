@@ -4,12 +4,15 @@ import com.example.ks.toner.domain.Toner;
 import com.example.ks.toner.dto.CreateToner;
 import com.example.ks.toner.dto.UpdateToner;
 import com.example.ks.toner.service.TonerService;
+import com.example.ks.tonerMonth.domain.TonerMonth;
+import com.example.ks.tonerMonth.service.TonerMonthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -18,12 +21,15 @@ import java.util.List;
 public class TonerController {
 
     private final TonerService tonerService;
+    private final TonerMonthService tonerMonthService;
 
     // 토너 목록 조회
     @GetMapping("/toner")
     public ModelAndView listToner() {
         List<Toner> tonerList = tonerService.findAll();
+        List<TonerMonth> tonerMonth = tonerMonthService.findByTonerMonthDate(LocalDate.now());
         ModelAndView modelAndView = new ModelAndView("toner");
+        modelAndView.addObject("tonerMonth", tonerMonth);
         modelAndView.addObject("tonerList", tonerList);
         return modelAndView;
     }

@@ -66,6 +66,7 @@
         <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
         <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
         <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
     </div>
 </div>
 
@@ -95,11 +96,10 @@
         <tr>
             <th>제품 코드</th>
             <th>제품명</th>
-            <th>수량</th>
             <th>단위</th>
             <th>비고</th>
             <th>삭제 상태</th>
-            <th>수정</th> <!-- 수정 버튼 열 추가 -->
+            <th>수정</th>
         </tr>
         </thead>
         <tbody>
@@ -110,7 +110,6 @@
                    th:text="${toner.getTonerName()}">
                 </a>
             </td>
-            <td th:text="${toner.getTonerQuantity()}">재고 수량</td>
             <td th:text="${toner.getTonerUnit()}">단위</td>
             <td th:text="${toner.getTonerText()}">비고</td>
             <td th:text="${toner.getDel()}">삭제 상태</td>
