@@ -67,4 +67,8 @@ public class Toner {
         this.del = dto.del();
     }
 
+    public void updateQuantity(int quantity) {
+        this.tonerQuantity = quantity;
+    }
+
 }
