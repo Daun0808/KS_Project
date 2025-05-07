@@ -17,7 +17,7 @@ public record UpdateTonerHistory(
 
         Integer historyDelivery, // 수정할 출고수량
 
-        @Size(max = 20)
+        @Size(max = 50)
         String historyText, // 수정할 히스토리 메모
 
         @Size(max = 1)
