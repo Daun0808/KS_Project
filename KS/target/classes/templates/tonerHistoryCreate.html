@@ -79,7 +79,7 @@
                     <option value="">부서를 선택하세요</option>
                     <option th:each="department : ${departmentList}"
                             th:value="${department.getDepartmentName()}"
-                            th:text="${department.getDepartmentName()}">
+                            th:text="${department.getDepartmentName() + ' (' + department.getDepartmentFloor() + '층)'}">
                     </option>
                 </select>
             </div>
