@@ -7,7 +7,7 @@ spring:
       name: ksadmin
       password: ksh110425!@
   datasource:
-    url: jdbc:mariadb://localhost:3306/KS
+    url: jdbc:mariadb://127.0.0.1:3306/KS
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: ksh110425!@
