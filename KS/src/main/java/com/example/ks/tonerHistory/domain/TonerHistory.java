@@ -38,7 +38,7 @@ public class TonerHistory {
     @Column(name = "history_delivery")
     private Integer historyDelivery; // 출고수량
 
-    @Column(name = "history_text", length = 20)
+    @Column(name = "history_text", length = 50)
     private String historyText; // 메모
 
     @Column(name = "del", nullable = false, length = 1)
