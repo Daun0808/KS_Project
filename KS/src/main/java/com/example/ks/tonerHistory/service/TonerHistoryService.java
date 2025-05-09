@@ -29,7 +29,7 @@ public class TonerHistoryService {
 
     @Transactional(readOnly = true)
     public List<TonerHistory> findByToner_TonerId(int tonerId) {
-        return tonerHistoryRepository.findByToner_TonerId(tonerId);
+        return tonerHistoryRepository.findByToner_TonerIdOrderByHistoryDateDesc(tonerId);
     }
 
     public void createTonerHistory(CreateTonerHistory createTonerHistory) {
