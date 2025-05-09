@@ -21,7 +21,7 @@ public record CreateTonerHistory(
 
         Integer historyDelivery, // 출고수량
 
-        @Size(max = 20)
+        @Size(max = 50)
         String historyText, // 히스토리 메모
 
         @NotBlank @Size(max = 1)

@@ -9,26 +9,31 @@
         function filterTable() {
             let floorInput = document.getElementById("floorSearch").value.toLowerCase();
             let nameInput = document.getElementById("nameSearch").value.toLowerCase();
-            let uniqueNumberInput = document.getElementById("uniqueNumberSearch").value.toLowerCase();
+            let placeInput = document.getElementById("placeSearch").value.toLowerCase(); // 🔼 추가
+            let printerNameInput = document.getElementById("printerNameSearch").value.toLowerCase();
+
             let showOnlyActive = document.getElementById("showActive").checked;
             let tableRows = document.querySelectorAll("tbody tr");
 
             tableRows.forEach(row => {
                 let floor = row.children[0].innerText.toLowerCase();
                 let name = row.children[1].innerText.toLowerCase();
-                let uniqueNumber = row.children[4].innerText.toLowerCase();
+                let place = row.children[2].innerText.toLowerCase(); // 🔼 설치 장소는 2번째 인덱스
+                let printerName = row.children[3].innerText.toLowerCase();
+
                 let delStatus = row.getAttribute("data-del");
 
-                let matchesSearch = floor.includes(floorInput) && name.includes(nameInput) && uniqueNumber.includes(uniqueNumberInput);
+                let matchesSearch = floor.includes(floorInput) &&
+                    name.includes(nameInput) &&
+                    place.includes(placeInput) &&
+                    printerName.includes(printerNameInput);
+
                 let matchesDelStatus = !showOnlyActive || delStatus === "N";
 
-                if (matchesSearch && matchesDelStatus) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
+                row.style.display = (matchesSearch && matchesDelStatus) ? "" : "none";
             });
         }
+
 
         window.onload = function() {
             document.getElementById("showActive").checked = true;
@@ -100,16 +105,23 @@
         <div class="col-md-2">
             <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색" onkeyup="filterTable()">
         </div>
+
+        <!-- 설치 장소 검색 input -->
         <div class="col-md-2">
-            <input type="text" id="uniqueNumberSearch" class="form-control" placeholder="프린터 고유 번호 검색" onkeyup="filterTable()">
+            <input type="text" id="placeSearch" class="form-control" placeholder="설치 장소 검색" onkeyup="filterTable()">
         </div>
-        <div class="col-md-3">
+
+        <div class="col-md-2">
+            <input type="text" id="printerNameSearch" class="form-control" placeholder="프린터 이름 검색" onkeyup="filterTable()">
+        </div>
+
+        <div class="col-md-2">
             <div class="form-check">
                 <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
-                <label for="showActive" class="form-check-label">폐기 안된 프린터만 보기</label>
+                <label for="showActive" class="form-check-label">폐기 안된 프린터 보기</label>
             </div>
         </div>
-        <div class="col-md-3 text-end">
+        <div class="col-md-2 text-end">
             <a th:href="@{/printer/create}">
                 <button class="btn btn-primary">프린터 등록</button>
             </a>

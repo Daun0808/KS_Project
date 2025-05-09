@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TonerHistoryRepository extends JpaRepository<TonerHistory, Integer> {
-    List<TonerHistory> findByToner_TonerId(int tonerId);
+    List<TonerHistory> findByToner_TonerIdOrderByHistoryDateDesc(int tonerId);
 
 }
