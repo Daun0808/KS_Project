@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `department` (
   PRIMARY KEY (`department_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 테이블 데이터 ks.department:~52 rows (대략적) 내보내기
+-- 테이블 데이터 ks.department:~51 rows (대략적) 내보내기
 INSERT IGNORE INTO `department` (`department_id`, `department_name`, `department_floor`, `del`) VALUES
 	(1, '입력테스트 2', '1', 'Y'),
 	(2, 'test', '2', 'Y'),
@@ -144,7 +144,7 @@ INSERT IGNORE INTO `printer` (`printer_id`, `department_id`, `print_place`, `pri
 	(33, 10, '전산실 예비', '2023-04-01', 'Samsung', 'C433W', 'C', '2023-04-01', '2023-04-01', '', 'PR-23-009', '', '', 'N', NULL, NULL, 'N'),
 	(34, 9, '약제과', '2023-07-01', 'Samsung', 'SL-M3220ND', 'B', '2022-10-01', '2023-07-01', '', 'PR-23-012', '2.116', '복약지도', 'N', NULL, NULL, 'N'),
 	(35, 9, '약제과', '2023-08-01', 'HP', 'HP M501dn', 'B', '2023-08-01', '2023-08-01', '', 'PR-23-014', '2.115', '처방전', 'N', NULL, NULL, 'N'),
-	(36, 9, '약제과', '2023-08-01', 'HP', 'HP M501dn', 'B', '2023-08-01', '2023-08-01', '', 'PR-23-013', '2.050', '제증명', 'N', NULL, '', 'N'),
+	(36, 5, '원무 접수수납 공통', '2023-08-01', 'HP', 'HP M501dn', 'B', '2023-08-01', '2023-08-01', '', 'PR-23-013', '2.050', '제증명', 'N', NULL, '', 'N'),
 	(37, 5, '원무과 사무실', '2024-03-01', 'Samsung', 'SL-M2843DW', 'B', '2024-03-01', '2024-03-01', 'SEC842519E00376', 'PR-24-005', '3.120', '', 'N', NULL, NULL, 'N'),
 	(38, 15, '재활치료실', '2011-03-01', 'Samsung', 'ML-2525K', 'B', '2011-03-01', '2011-03-01', '', 'PR-11-007', '', '', 'N', NULL, NULL, 'N'),
 	(39, 16, '내과6 외래', '2011-03-01', 'Samsung', 'ML-2525K', 'B', '2011-03-01', '2011-03-01', '', 'PR-11-008', '', '', 'N', NULL, NULL, 'N'),
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS `printer_toner` (
   PRIMARY KEY (`print_toner_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 테이블 데이터 ks.printer_toner:~32 rows (대략적) 내보내기
+-- 테이블 데이터 ks.printer_toner:~31 rows (대략적) 내보내기
 INSERT IGNORE INTO `printer_toner` (`print_toner_id`, `print_code`, `toner_name`) VALUES
 	(32, 'SL-M2630ND', 'MLT-K250L'),
 	(33, 'SL-M2843WD', 'MLT-K250L'),
@@ -295,9 +295,9 @@ CREATE TABLE IF NOT EXISTS `print_locate_history` (
   PRIMARY KEY (`print_locate_history_id`),
   KEY `FK_print_locate_history_printer` (`printer_id`),
   CONSTRAINT `FK_print_locate_history_printer` FOREIGN KEY (`printer_id`) REFERENCES `printer` (`printer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 테이블 데이터 ks.print_locate_history:~7 rows (대략적) 내보내기
+-- 테이블 데이터 ks.print_locate_history:~8 rows (대략적) 내보내기
 INSERT IGNORE INTO `print_locate_history` (`print_locate_history_id`, `printer_id`, `department_before_name`, `department_new_name`, `print_after_date`, `print_text`, `print_repair`, `print_repair_date`, `history_tag`, `del`) VALUES
 	(1, 1, '입력테스트 2', '입력테스트', '2025-04-25', '부서 변경에 따른 이력 자동 생성', NULL, NULL, '부서 변경', 'N'),
 	(2, 1, NULL, NULL, NULL, '', '수리 테스트', '2025-04-25', '수리', 'N'),
@@ -305,7 +305,8 @@ INSERT IGNORE INTO `print_locate_history` (`print_locate_history_id`, `printer_i
 	(4, 1, NULL, NULL, NULL, '', '수리 테스트3', '2025-04-26', '수리', 'N'),
 	(5, 1, NULL, NULL, NULL, '', '수리 테스트4', '2025-04-30', '수리', 'N'),
 	(6, 1, '입력테스트', '입력테스트 2', '2025-04-25', '부서 변경에 따른 이력 자동 생성', NULL, NULL, '부서 변경', 'Y'),
-	(7, 105, '응급센터', '원무과', '2025-05-01', '부서 변경에 따른 이력 자동 생성', NULL, NULL, '부서 변경', 'N');
+	(7, 105, '응급센터', '원무과', '2025-05-01', '부서 변경에 따른 이력 자동 생성', NULL, NULL, '부서 변경', 'N'),
+	(8, 36, '약제과', '원무과', '2025-05-03', '부서 변경에 따른 이력 자동 생성', NULL, NULL, '부서 변경', 'N');
 
 -- 테이블 ks.provider 구조 내보내기
 CREATE TABLE IF NOT EXISTS `provider` (
@@ -336,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `toner` (
   PRIMARY KEY (`toner_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 테이블 데이터 ks.toner:~23 rows (대략적) 내보내기
+-- 테이블 데이터 ks.toner:~21 rows (대략적) 내보내기
 INSERT IGNORE INTO `toner` (`toner_id`, `toner_code`, `toner_name`, `toner_text`, `toner_unit`, `toner_quantity`, `del`) VALUES
 	(1, '테스트 코드', '테스트 제품명', '테스트 비고', '테스트 단위', 20, 'Y'),
 	(2, 'KS-TS02', 'MLT-D105L', '삼성프린터', 'EA', 5, 'N'),
@@ -370,20 +371,36 @@ CREATE TABLE IF NOT EXISTS `toner_history` (
   `history_date` date NOT NULL COMMENT '일자',
   `history_received` int(11) DEFAULT NULL COMMENT '입고수량',
   `history_delivery` int(11) DEFAULT NULL COMMENT '출고수량',
-  `history_text` varchar(20) DEFAULT NULL COMMENT '메모',
+  `history_text` varchar(50) DEFAULT NULL COMMENT '메모',
   `del` varchar(1) DEFAULT NULL COMMENT '플래그 값 / Y or N',
   PRIMARY KEY (`history_id`),
   KEY `FK_toner_history_toner` (`toner_id`),
   CONSTRAINT `FK_toner_history_toner` FOREIGN KEY (`toner_id`) REFERENCES `toner` (`toner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 테이블 데이터 ks.toner_history:~5 rows (대략적) 내보내기
+-- 테이블 데이터 ks.toner_history:~21 rows (대략적) 내보내기
 INSERT IGNORE INTO `toner_history` (`history_id`, `toner_id`, `department_name`, `history_date`, `history_received`, `history_delivery`, `history_text`, `del`) VALUES
 	(1, 1, '입력테스트', '2025-04-29', 0, 1, '테스트', 'Y'),
 	(2, 1, '입력테스트', '2025-04-29', 0, 1, '테스트2', 'Y'),
 	(3, 1, '입력테스트', '2025-04-29', 1, 0, '테스트 입고', 'Y'),
 	(11, 2, '영상의학과', '2025-05-02', 1, 1, '테스트', 'Y'),
-	(12, 3, '신경과', '2025-05-02', 0, 1, '', 'N');
+	(12, 3, '신경과', '2025-05-02', 0, 1, '', 'N'),
+	(13, 10, '종합검진', '2025-05-03', 0, 1, '종검 작은사무실', 'N'),
+	(14, 8, '7A병동', '2025-05-07', 0, 1, '7A 병동', 'N'),
+	(15, 8, '원무과', '2025-05-06', 0, 1, '원무과 응급실', 'N'),
+	(16, 8, '5A병동', '2025-05-06', 0, 1, '5A 병동', 'N'),
+	(17, 8, '5A병동', '2025-05-06', 0, 1, '5A 불량 교체 (가루 누수 70%)', 'N'),
+	(18, 8, '5B병동', '2025-05-06', 0, 2, '5B 병동(교체 후 버림)', 'N'),
+	(19, 9, '원무과', '2025-05-06', 0, 1, '원무과 퇴원계', 'N'),
+	(20, 8, '종합검진', '2025-05-07', 0, 1, '종검 접수', 'N'),
+	(21, 5, '약제과', '2025-05-07', 0, 1, '1F 약제과', 'N'),
+	(22, 8, '6A병동', '2025-05-07', 0, 1, '6A 병동', 'N'),
+	(23, 8, '원무과', '2025-05-07', 0, 1, '원무과 사무실', 'N'),
+	(24, 8, '종합검진', '2025-05-07', 0, 1, '내시경실', 'N'),
+	(25, 3, '원무과', '2025-05-08', 0, 1, '1F 원무과', 'N'),
+	(26, 8, '심사과', '2025-05-08', 0, 1, '8F 심사과', 'N'),
+	(27, 3, '교육실', '2025-05-08', 0, 1, '8F 교육실', 'N'),
+	(28, 5, '원무과', '2025-05-08', 0, 1, '1F 원무과', 'N');
 
 -- 테이블 ks.toner_month 구조 내보내기
 CREATE TABLE IF NOT EXISTS `toner_month` (
@@ -422,14 +439,14 @@ INSERT IGNORE INTO `toner_month` (`toner_month_id`, `toner_name`, `toner_month_d
 	(21, 'CLT-M405S', '2025-04-30', 3, 3, 0, 0),
 	(22, 'CF237A', '2025-04-30', 3, 3, 0, 0),
 	(23, 'MLT-D105L', '2025-05-01', 3, 3, 0, 0),
-	(24, 'MLT-D115L', '2025-05-01', 4, 3, 0, 1),
+	(24, 'MLT-D115L', '2025-05-01', 4, 1, 0, 3),
 	(25, 'MLT-D201S', '2025-05-01', 1, 1, 0, 0),
-	(26, 'MLT-D203L', '2025-05-01', 6, 6, 0, 0),
+	(26, 'MLT-D203L', '2025-05-01', 6, 4, 0, 2),
 	(27, 'MLT-D203E', '2025-05-01', 4, 4, 0, 0),
 	(28, 'MLT-D205L', '2025-05-01', 3, 3, 0, 0),
-	(29, 'MLT-D250L', '2025-05-01', 13, 13, 0, 0),
-	(30, 'MLT-D405L', '2025-05-01', 3, 3, 0, 0),
-	(31, 'CF287A', '2025-05-01', 3, 3, 0, 0),
+	(29, 'MLT-D250L', '2025-05-01', 13, 2, 0, 11),
+	(30, 'MLT-D405L', '2025-05-01', 3, 2, 0, 1),
+	(31, 'CF287A', '2025-05-01', 3, 2, 0, 1),
 	(32, 'CE310A(BK)', '2025-05-01', 2, 2, 0, 0),
 	(33, 'CE311A(C)', '2025-05-01', 3, 3, 0, 0),
 	(34, 'CE312A(Y)', '2025-05-01', 3, 3, 0, 0),
