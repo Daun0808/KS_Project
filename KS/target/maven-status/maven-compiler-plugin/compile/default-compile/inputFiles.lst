@@ -1,3 +1,9 @@
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\controller\ComputerController.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\domain\Computer.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\dto\CreateComputer.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\dto\UpdateComputer.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\repository\ComputerRepository.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\computer\service\ComputerService.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\config\SecurityConfig.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\config\WebConfig.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\department\controller\DepartmentController.java
@@ -7,6 +13,12 @@ C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\departme
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\department\service\DepartmentService.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\KsApplication.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\Main\main.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\controller\MonitorController.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\domain\Monitor.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\dto\CreateMonitor.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\dto\UpdateMonitor.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\repository\MonitorRepository.java
+C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\monitor\service\MonitorService.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\print\controller\PrinterController.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\print\domain\Printer.java
 C:\Users\master\IdeaProjects\KS_Project\KS\src\main\java\com\example\ks\print\dto\CreatePrinter.java
