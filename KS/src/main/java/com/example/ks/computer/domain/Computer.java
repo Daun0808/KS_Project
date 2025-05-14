@@ -37,9 +37,6 @@ public class Computer {
     @Column(name = "computer_hwp", length = 30)
     private String computerHwp;
 
-    @Column(name = "computer_exel", length = 30)
-    private String computerExel;
-
     @Column(name = "computer_office", length = 30)
     private String computerOffice;
 
@@ -95,7 +92,6 @@ public class Computer {
             String computerOs,
             String computerIp,
             String computerHwp,
-            String computerExel,
             String computerOffice,
             String computerS1,
             String computerAlyac,
@@ -118,7 +114,6 @@ public class Computer {
         this.computerOs = computerOs;
         this.computerIp = computerIp;
         this.computerHwp = computerHwp;
-        this.computerExel = computerExel;
         this.computerOffice = computerOffice;
         this.computerS1 = computerS1;
         this.computerAlyac = computerAlyac;
@@ -144,7 +139,6 @@ public class Computer {
                 .computerOs(dto.computerOs())
                 .computerIp(dto.computerIp())
                 .computerHwp(dto.computerHwp())
-                .computerExel(dto.computerExel())
                 .computerOffice(dto.computerOffice())
                 .computerS1(dto.computerS1())
                 .computerAlyac(dto.computerAlyac())
@@ -170,7 +164,6 @@ public class Computer {
         this.computerOs = dto.computerOs();
         this.computerIp = dto.computerIp();
         this.computerHwp = dto.computerHwp();
-        this.computerExel = dto.computerExel();
         this.computerOffice = dto.computerOffice();
         this.computerS1 = dto.computerS1();
         this.computerAlyac = dto.computerAlyac();
