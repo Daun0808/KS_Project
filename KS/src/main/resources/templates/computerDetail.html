@@ -77,7 +77,7 @@
         <li class="list-group-item" th:each="monitor : ${monitors}"
             th:if="${monitor.monitorPlace == computer.computerPlace}">
           <a th:href="@{/monitor/detail/{id}(id=${monitor.monitorId})}"
-             th:text="'모니터 ID: ' + ' (' + ${monitor.getMonitorText()} + ')'">
+             th:text="${monitor.getMonitorText()}">
           </a>
         </li>
       </ul>
