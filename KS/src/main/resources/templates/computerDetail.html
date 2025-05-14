@@ -76,7 +76,7 @@
       <ul class="list-group">
         <li class="list-group-item" th:each="monitor : ${monitors}"
             th:if="${monitor.monitorPlace == computer.computerPlace}">
-          <a th:href="@{/monitor/detail/{id}(id=${monitor.monitorId})}"
+          <a th:href="@{/monitor/{monitor_id}(monitor_id=${monitor.monitorId})}"
              th:text="${monitor.getMonitorText()}">
           </a>
         </li>
