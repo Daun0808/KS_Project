@@ -13,7 +13,6 @@ public record UpdateComputer(
         @Size(max = 30) String computerOs,
         @Size(max = 30) String computerIp,
         @Size(max = 30) String computerHwp,
-        @Size(max = 30) String computerExel,
         @Size(max = 30) String computerOffice,
         @Size(max = 20) String computerS1,
         @Size(max = 20) String computerAlyac,
