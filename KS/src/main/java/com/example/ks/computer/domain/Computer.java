@@ -64,11 +64,6 @@ public class Computer {
     @Column(name = "computer_memory", length = 20)
     private String computerMemory;
 
-    @Column(name = "computer_manufacturer", length = 30)
-    private String computerManufacturer;
-
-    @Column(name = "computer_sale_date")
-    private LocalDate computerSaleDate;
 
     @Column(name = "computer_unique", length = 30)
     private String computerUniqueCode;
@@ -101,8 +96,6 @@ public class Computer {
             String computerChipset,
             String computerCpu,
             String computerMemory,
-            String computerManufacturer,
-            LocalDate computerSaleDate,
             String computerUniqueCode,
             String computerText,
             String computerDel,
@@ -123,8 +116,7 @@ public class Computer {
         this.computerChipset = computerChipset;
         this.computerCpu = computerCpu;
         this.computerMemory = computerMemory;
-        this.computerManufacturer = computerManufacturer;
-        this.computerSaleDate = computerSaleDate;
+
         this.computerUniqueCode = computerUniqueCode;
         this.computerText = computerText;
         this.computerDel = computerDel;
@@ -148,8 +140,6 @@ public class Computer {
                 .computerChipset(dto.computerChipset())
                 .computerCpu(dto.computerCpu())
                 .computerMemory(dto.computerMemory())
-                .computerManufacturer(dto.computerManufacturer())
-                .computerSaleDate(dto.computerSaleDate())
                 .computerUniqueCode(dto.computerUniqueCode())
                 .computerText(dto.computerText())
                 .computerDel(dto.computerDel())
@@ -173,8 +163,6 @@ public class Computer {
         this.computerChipset = dto.computerChipset();
         this.computerCpu = dto.computerCpu();
         this.computerMemory = dto.computerMemory();
-        this.computerManufacturer = dto.computerManufacturer();
-        this.computerSaleDate = dto.computerSaleDate();
         this.computerUniqueCode = dto.computerUniqueCode();
         this.computerText = dto.computerText();
         this.computerDel = dto.computerDel();
