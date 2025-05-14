@@ -22,8 +22,6 @@ public record CreateComputer(
         @Size(max = 30) String computerChipset,
         @Size(max = 50) String computerCpu,
         @Size(max = 20) String computerMemory,
-        @Size(max = 30) String computerManufacturer,
-        LocalDate computerSaleDate,
         @Size(max = 30) String computerUniqueCode,
         @Size(max = 50) String computerText,
         @Size(max = 1) String computerDel,
