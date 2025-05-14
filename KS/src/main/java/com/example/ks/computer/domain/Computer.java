@@ -4,6 +4,7 @@ import com.example.ks.computer.dto.CreateComputer;
 import com.example.ks.computer.dto.UpdateComputer;
 import com.example.ks.department.domain.Department;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -74,6 +75,9 @@ public class Computer {
     @Column(name = "computer_del", length = 1)
     private String computerDel;
 
+    @Column(name = "computer_del_date")
+    private LocalDate computerDelDate;
+
     @Column(name = "computer_del_text", length = 50)
     private String computerDelText;
 
@@ -100,7 +104,8 @@ public class Computer {
             String computerText,
             String computerDel,
             String computerDelText,
-            String del
+            String del,
+            LocalDate computerDelDate
     ) {
         this.department = department;
         this.computerPlace = computerPlace;
@@ -116,12 +121,12 @@ public class Computer {
         this.computerChipset = computerChipset;
         this.computerCpu = computerCpu;
         this.computerMemory = computerMemory;
-
         this.computerUniqueCode = computerUniqueCode;
         this.computerText = computerText;
         this.computerDel = computerDel;
         this.computerDelText = computerDelText;
         this.del = del;
+        this.computerDelDate = computerDelDate;
     }
 
     public static Computer toEntity(CreateComputer dto, Department department) {
@@ -145,6 +150,7 @@ public class Computer {
                 .computerDel(dto.computerDel())
                 .computerDelText(dto.computerDelText())
                 .del(dto.del())
+                .computerDelDate(null)
                 .build();
     }
 
@@ -166,6 +172,7 @@ public class Computer {
         this.computerUniqueCode = dto.computerUniqueCode();
         this.computerText = dto.computerText();
         this.computerDel = dto.computerDel();
+        this.computerDelDate = dto.computerDelDate();
         this.computerDelText = dto.computerDelText();
     }
 
