@@ -52,6 +52,9 @@ public class Monitor {
     @Column(name = "del", nullable = false, length = 1)
     private String del;
 
+    @Column(name = "monitor_del_date")
+    private LocalDate monitorDelDate;
+
     @Builder
     public Monitor(
             Department department,
@@ -63,7 +66,8 @@ public class Monitor {
             String monitorText,
             String monitorDel,
             String monitorDelText,
-            String del
+            String del,
+            LocalDate monitorDelDate
     ) {
         this.department = department;
         this.monitorPlace = monitorPlace;
@@ -75,6 +79,7 @@ public class Monitor {
         this.monitorDel = monitorDel;
         this.monitorDelText = monitorDelText;
         this.del = del;
+        this.monitorDelDate = monitorDelDate;
     }
 
     public static Monitor toEntity(CreateMonitor dto, Department department) {
@@ -89,6 +94,7 @@ public class Monitor {
                 .monitorDel(dto.monitorDel())
                 .monitorDelText(dto.monitorDelText())
                 .del(dto.del())
+                .monitorDelDate(null)
                 .build();
     }
 
@@ -102,6 +108,7 @@ public class Monitor {
         this.monitorText = dto.monitorText();
         this.monitorDel = dto.monitorDel();
         this.monitorDelText = dto.monitorDelText();
+        this.monitorDelDate = dto.monitorDelDate();
     }
 
     public void delete(String del) {

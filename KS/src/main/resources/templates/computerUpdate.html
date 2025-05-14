@@ -131,6 +131,11 @@
     </div>
 
     <div class="mb-3">
+      <label class="form-label">생산일</label>
+      <input type="date" class="form-control" name="computerDelDate" th:value="${computer.computerDelDate}">
+    </div>
+
+    <div class="mb-3">
       <label class="form-label">폐기 사유</label>
       <textarea class="form-control" th:field="*{computerDelText}"></textarea>
     </div>
