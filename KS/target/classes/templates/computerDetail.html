@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>컴퓨터 상세 정보</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 상단 고정 메뉴바 스타일 */
+    .navbar-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #f8f9fa;
+      padding: 5px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-btn {
+      font-size: 1rem;
+      margin-right: 15px;
+    }
+
+    body {
+      padding-top: 60px;
+    }
+  </style>
+</head>
+<body>
+<!-- 상단 고정 메뉴바 -->
+<div class="navbar-fixed">
+  <div class="container d-flex justify-content-start">
+    <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+    <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+    <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+    <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+    <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+    <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+    <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">컴퓨터 상세 정보</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">설치 장소: <span th:text="${computer.computerPlace}"></span></h5>
+      <p class="card-text"><strong>용도:</strong> <span th:text="${computer.computerUse}"></span></p>
+      <p class="card-text"><strong>모델명:</strong> <span th:text="${computer.computerModel}"></span></p>
+      <p class="card-text"><strong>IP 주소:</strong> <span th:text="${computer.computerIp}"></span></p>
+      <p class="card-text"><strong>OS:</strong> <span th:text="${computer.computerOs}"></span></p>
+      <p class="card-text"><strong>한컴:</strong> <span th:text="${computer.computerHwp}"></span></p>
+      <p class="card-text"><strong>오피스:</strong> <span th:text="${computer.computerOffice}"></span></p>
+      <p class="card-text"><strong>S1:</strong> <span th:text="${computer.computerS1}"></span></p>
+      <p class="card-text"><strong>알약:</strong> <span th:text="${computer.computerAlyac}"></span></p>
+      <p class="card-text"><strong>Chipset:</strong> <span th:text="${computer.computerChipset}"></span></p>
+      <p class="card-text"><strong>CPU:</strong> <span th:text="${computer.computerCpu}"></span></p>
+      <p class="card-text"><strong>Memory:</strong> <span th:text="${computer.computerMemory}"></span></p>
+      <p class="card-text"><strong>생산일:</strong> <span th:text="${computer.computerProductDate}"></span></p>
+      <p class="card-text"><strong>고유번호:</strong> <span th:text="${computer.computerUniqueCode}"></span></p>
+      <p class="card-text"><strong>비고:</strong> <span th:text="${computer.computerText}"></span></p>
+      <p class="card-text"><strong>폐기 상태:</strong> <span th:text="${computer.computerDel}"></span></p>
+      <p class="card-text"><strong>폐기 날짜:</strong> <span th:text="${computer.computerDelDate}"></span></p>
+      <p class="card-text"><strong>폐기 사유:</strong> <span th:text="${computer.computerDelText}"></span></p>
+      <p class="card-text"><strong>플래그 값:</strong> <span th:text="${computer.del}"></span></p>
+      <hr>
+      <p class="card-text"><strong>소속 부서:</strong>
+        <a th:href="@{/department/{id}(id=${computer.department.departmentId})}"
+           th:text="${computer.department.departmentName + ' (' + computer.department.departmentFloor + '층)'}"></a>
+      </p>
+    </div>
+    <div class="mt-4">
+      <h5>관련 모니터 목록</h5>
+      <ul class="list-group">
+        <li class="list-group-item" th:each="monitor : ${monitors}"
+            th:if="${monitor.monitorPlace == computer.computerPlace}">
+          <a th:href="@{/monitor/{monitor_id}(monitor_id=${monitor.monitorId})}"
+             th:text="${monitor.getMonitorText()}">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="/computer" class="btn btn-secondary">목록으로 돌아가기</a>
+    <a th:href="@{/computer/update/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/computer/delete/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
