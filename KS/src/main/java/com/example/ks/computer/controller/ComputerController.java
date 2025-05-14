@@ -6,6 +6,8 @@ import com.example.ks.computer.dto.UpdateComputer;
 import com.example.ks.computer.service.ComputerService;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.service.DepartmentService;
+import com.example.ks.monitor.domain.Monitor;
+import com.example.ks.monitor.service.MonitorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ public class ComputerController {
 
     private final ComputerService computerService;
     private final DepartmentService departmentService;
+    private final MonitorService monitorService;
 
     @GetMapping("/computer")
     public ModelAndView computerList() {
@@ -54,7 +57,11 @@ public class ComputerController {
     public ModelAndView computerDetail(@PathVariable("computer_id") int computerId) {
         ModelAndView mav = new ModelAndView("computerDetail");
         Computer computer = computerService.findByComputerId(computerId);
+        List<Monitor> monitors = monitorService.findAll().stream()
+                .filter(monitor -> !"Y".equals(monitor.getDel()))
+                .toList();
         mav.addObject("computer", computer);
+        mav.addObject("monitors", monitors);
         return mav;
     }
 
