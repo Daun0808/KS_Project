@@ -63,6 +63,18 @@
            th:text="${monitor.department.departmentName + ' (' + monitor.department.departmentFloor + '층)'}"></a>
       </p>
     </div>
+
+    <div class="mt-4">
+      <h5>관련 모니터 목록</h5>
+      <ul class="list-group">
+        <li class="list-group-item" th:each="computer : ${computers}"
+            th:if="${monitor.monitorPlace == computer.computerPlace}">
+          <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}"
+             th:text="${computer.getComputerPlace()}">
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="mt-4 text-center">
