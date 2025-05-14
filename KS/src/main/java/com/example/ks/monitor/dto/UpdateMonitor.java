@@ -17,5 +17,6 @@ public record UpdateMonitor(
         @Size(max = 30) String monitorText,
         @Size(max = 1) String monitorDel,
         @Size(max = 50) String monitorDelText,
-        @NotNull String departmentId
+        @NotNull String departmentId,
+        LocalDate monitorDelDate
 ) {}
