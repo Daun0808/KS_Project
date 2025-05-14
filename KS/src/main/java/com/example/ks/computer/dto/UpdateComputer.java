@@ -26,5 +26,6 @@ public record UpdateComputer(
         @Size(max = 50) String computerText,
         @Size(max = 1) String computerDel,
         @Size(max = 50) String computerDelText,
-        @NotNull String departmentId
+        @NotNull String departmentId,
+        LocalDate computerDelDate
 ) {}
