@@ -76,7 +76,7 @@
   <div class="mt-4">
     <a href="/computer" class="btn btn-secondary">목록으로 돌아가기</a>
     <a th:href="@{/computer/update/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary">수정</a>
-    <a th:href="@{/computer/delete/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary">삭제</a>
+    <a th:href="@{/computer/delete/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
   </div>
 </div>
 
