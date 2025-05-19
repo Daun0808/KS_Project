@@ -61,6 +61,10 @@
     body {
       padding-top: 60px;
     }
+
+    td, th {
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -117,10 +121,8 @@
         <th>OS</th>
         <th>CPU</th>
         <th>메모리</th>
-        <th>사용 용도</th>
         <th>고유 번호</th>
         <th>폐기 여부</th>
-        <th>비고</th>
       </tr>
       </thead>
       <tbody>
@@ -135,10 +137,8 @@
         <td th:text="${computer.getComputerOs()}">OS</td>
         <td th:text="${computer.getComputerCpu()}">CPU</td>
         <td th:text="${computer.getComputerMemory()}">메모리</td>
-        <td th:text="${computer.getComputerUse()}">사용 용도</td>
         <td th:text="${computer.getComputerUniqueCode()}">고유 번호</td>
         <td th:text="${computer.getComputerDel()}">폐기 여부</td>
-        <td th:text="${computer.getComputerText()}">비고</td>
       </tr>
 
       </tbody>
