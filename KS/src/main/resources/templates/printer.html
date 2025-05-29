@@ -11,7 +11,7 @@
             let nameInput = document.getElementById("nameSearch").value.toLowerCase();
             let placeInput = document.getElementById("placeSearch").value.toLowerCase(); // 🔼 추가
             let printerNameInput = document.getElementById("printerNameSearch").value.toLowerCase();
-
+            let printerTonerInput = document.getElementById("printerTonerSearch").value.toLowerCase();
             let showOnlyActive = document.getElementById("showActive").checked;
             let tableRows = document.querySelectorAll("tbody tr");
 
@@ -20,13 +20,15 @@
                 let name = row.children[1].innerText.toLowerCase();
                 let place = row.children[2].innerText.toLowerCase(); // 🔼 설치 장소는 2번째 인덱스
                 let printerName = row.children[3].innerText.toLowerCase();
+                let printerToner = row.children[5].innerText.toLowerCase();
 
                 let delStatus = row.getAttribute("data-del");
 
                 let matchesSearch = floor.includes(floorInput) &&
                     name.includes(nameInput) &&
                     place.includes(placeInput) &&
-                    printerName.includes(printerNameInput);
+                    printerName.includes(printerNameInput) &&
+                    printerToner.includes(printerTonerInput);
 
                 let matchesDelStatus = !showOnlyActive || delStatus === "N";
 
@@ -99,9 +101,16 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">프린터 목록</h2>
-
     <div class="row mb-3">
         <div class="col-md-2">
+            <div class="form-check">
+                <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
+                <label for="showActive" class="form-check-label">폐기 안된 프린터 보기</label>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-1">
             <input type="text" id="floorSearch" class="form-control" placeholder="층 검색" onkeyup="filterTable()">
         </div>
         <div class="col-md-2">
@@ -116,13 +125,10 @@
         <div class="col-md-2">
             <input type="text" id="printerNameSearch" class="form-control" placeholder="프린터 이름 검색" onkeyup="filterTable()">
         </div>
-
         <div class="col-md-2">
-            <div class="form-check">
-                <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
-                <label for="showActive" class="form-check-label">폐기 안된 프린터 보기</label>
-            </div>
+            <input type="text" id="printerTonerSearch" class="form-control" placeholder="토너 이름 검색" onkeyup="filterTable()">
         </div>
+
         <div class="col-md-2 text-end">
             <a th:href="@{/printer/create}">
                 <button class="btn btn-primary">프린터 등록</button>
