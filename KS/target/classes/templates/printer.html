@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>프린터 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        td, th {
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .table td {
+            font-size: 0.9rem;
+        }
+
+        .table th {
+            font-size: 0.95rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+    </style>
+
+    <script>
+        function filterTable() {
+            let floorInput = document.getElementById("floorSearch").value.toLowerCase();
+            let nameInput = document.getElementById("nameSearch").value.toLowerCase();
+            let placeInput = document.getElementById("placeSearch").value.toLowerCase();
+            let printerNameInput = document.getElementById("printerNameSearch").value.toLowerCase();
+            let printerTonerInput = document.getElementById("printerTonerSearch").value.toLowerCase();
+            let showOnlyActive = document.getElementById("showActive").checked;
+            let tableRows = document.querySelectorAll("tbody tr");
+
+            let rowIndex = 1;
+
+            tableRows.forEach(row => {
+                let floor = row.children[1].innerText.toLowerCase();
+                let name = row.children[2].innerText.toLowerCase();
+                let place = row.children[3].innerText.toLowerCase();
+                let printerName = row.children[4].innerText.toLowerCase();
+                let printerToner = row.children[6].innerText.toLowerCase();
+                let delStatus = row.getAttribute("data-del");
+
+                let matchesSearch = floor.includes(floorInput) &&
+                    name.includes(nameInput) &&
+                    place.includes(placeInput) &&
+                    printerName.includes(printerNameInput) &&
+                    printerToner.includes(printerTonerInput);
+
+                let matchesDelStatus = !showOnlyActive || delStatus === "N";
+
+                if (matchesSearch && matchesDelStatus) {
+                    row.style.display = "";
+                    row.querySelector(".row-index").innerText = rowIndex++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+
+        }
+
+        window.onload = function () {
+            document.getElementById("showActive").checked = true;
+            filterTable();
+
+            const searchInputs = document.querySelectorAll("#floorSearch, #nameSearch, #placeSearch, #printerNameSearch, #printerTonerSearch");
+            searchInputs.forEach(input => {
+                input.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        filterTable();
+                    }
+                });
+            });
+        };
+    </script>
+</head>
+<body>
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+        <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+        <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+        <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+        <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">프린터 목록</h2>
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <div class="form-check">
+                <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
+                <label for="showActive" class="form-check-label">폐기 안된 프린터 보기</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-1">
+            <input type="text" id="floorSearch" class="form-control" placeholder="층 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="placeSearch" class="form-control" placeholder="설치 장소 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="printerNameSearch" class="form-control" placeholder="프린터 이름 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="printerTonerSearch" class="form-control" placeholder="토너 이름 검색">
+        </div>
+        <div class="col-md-2 text-end">
+            <a th:href="@{/printer/create}">
+                <button class="btn btn-primary">프린터 등록</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>번호</th>
+                <th>층</th>
+                <th>부서</th>
+                <th>설치 장소</th>
+                <th>프린터 이름</th>
+                <th>원내 고유 번호</th>
+                <th>토너</th>
+                <th>IP</th>
+                <th>배치일</th>
+                <th>폐기 여부</th>
+                <th>비고</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="printer, iterStat : ${printers}" th:attr="data-del=${printer.printDel}">
+                <td class="row-index" th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${printer.department.departmentFloor}">층</td>
+                <td th:text="${printer.department.departmentName}">부서</td>
+                <td th:text="${printer.printPlace}">설치 장소</td>
+                <td>
+                    <a th:href="@{/printer/{printer_id}(printer_id=${printer.printerId})}">
+                        <span th:text="${printer.printCode}">프린터 이름</span>
+                    </a>
+                </td>
+                <td th:text="${printer.getPrintUniqueNumber()}">원내 고유 번호</td>
+                <td th:text="${tonerName[iterStat.index]}">토너</td>
+                <td th:text="${printer.printIp}">IP 주소</td>
+                <td th:text="${printer.printPlaceDate}">배치일</td>
+                <td th:text="${printer.printDel}">폐기여부</td>
+                <td th:text="${printer.printText}">비고</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
