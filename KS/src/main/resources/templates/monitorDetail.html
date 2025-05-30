@@ -68,9 +68,10 @@
       <h5>사용중인 컴퓨터</h5>
       <ul class="list-group">
         <li class="list-group-item" th:each="computer : ${computers}"
-            th:if="${monitor.monitorPlace == computer.computerPlace}">
-          <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}"
-             th:text="${computer.getComputerPlace()}">
+            th:if="${monitor.monitorPlace == computer.computerPlace
+            and monitor.department.departmentId == computer.department.departmentId}">
+        <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}"
+             th:text="${ '( ' + computer.department.getDepartmentFloor() + '층 '+ computer.getDepartment().getDepartmentName() + ' )' +computer.getComputerPlace()}">
           </a>
         </li>
       </ul>
