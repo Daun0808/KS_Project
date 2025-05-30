@@ -76,7 +76,8 @@
       <h5>사용중인 모니터 목록</h5>
       <ul class="list-group">
         <li class="list-group-item" th:each="monitor : ${monitors}"
-            th:if="${monitor.monitorPlace == computer.computerPlace}">
+            th:if="${monitor.monitorPlace == computer.computerPlace}"
+            th:elseif="${monitor.getDepartment().getDepartmentId() == computer.getDepartment().getDepartmentId()}">
           <a th:href="@{/monitor/{monitor_id}(monitor_id=${monitor.monitorId})}"
              th:text="${monitor.getMonitorText()}">
           </a>
