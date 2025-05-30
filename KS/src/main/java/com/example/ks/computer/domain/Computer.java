@@ -22,7 +22,7 @@ public class Computer {
     @Column(name = "computer_id")
     private Integer computerId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
