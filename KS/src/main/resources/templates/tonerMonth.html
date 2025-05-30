@@ -31,12 +31,26 @@
         function filterTable() {
             let tonerNameInput = document.getElementById("tonerNameSearch").value.toLowerCase();
             let tableRows = document.querySelectorAll("tbody tr");
+            let rowIndex = 1;
 
             tableRows.forEach(row => {
-                let tonerName = row.querySelector("td a").innerText.toLowerCase();
-                row.style.display = tonerName.includes(tonerNameInput) ? "" : "none";
+                let tonerName = row.children[1].innerText.toLowerCase();
+                if (tonerName.includes(tonerNameInput)) {
+                    row.style.display = "";
+                    row.querySelector(".row-index").innerText = rowIndex++;
+                } else {
+                    row.style.display = "none";
+                }
             });
         }
+
+        window.onload = function () {
+            document.getElementById("tonerNameSearch").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    filterTable();
+                }
+            });
+        };
     </script>
 </head>
 <body>
@@ -59,7 +73,7 @@
     <!-- 검색 및 날짜 선택 -->
     <div class="row mb-3">
         <div class="col-md-4">
-            <input type="text" id="tonerNameSearch" class="form-control" placeholder="제품명 검색" onkeyup="filterTable()">
+            <input type="text" id="tonerNameSearch" class="form-control" placeholder="제품명 검색">
         </div>
 
         <div class="col-md-4">
@@ -80,6 +94,7 @@
     <table class="table table-bordered table-striped">
         <thead class="table-dark text-center">
         <tr>
+            <th>번호</th>
             <th>제품명</th>
             <th>마감일</th>
             <th>이월 수량</th>
@@ -89,7 +104,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="tm : ${tonerMonthList}">
+        <tr th:each="tm, iterStat : ${tonerMonthList}">
+            <td class="row-index" th:text="${iterStat.index + 1}">1</td>
             <td>
                 <a th:href="@{/toner/month/{toner_name}/history(toner_name=${tm.tonerName})}"
                    th:text="${tm.tonerName}"></a>

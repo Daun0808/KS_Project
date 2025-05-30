@@ -12,8 +12,10 @@
             let showOnlyActive = document.getElementById("showActive").checked;
             let tableRows = document.querySelectorAll("tbody tr");
 
+            let rowIndex = 1;
+
             tableRows.forEach(row => {
-                let tonerName = row.children[1].innerText.toLowerCase(); // 제품명
+                let tonerName = row.children[2].innerText.toLowerCase(); // 제품명
                 let delStatus = row.getAttribute("data-del"); // data-del 속성 가져오기
 
                 // 제품명 검색 필터링
@@ -24,6 +26,7 @@
 
                 if (matchesSearch && matchesDelStatus) {
                     row.style.display = "";
+                    row.querySelector(".row-index").innerText = rowIndex++;
                 } else {
                     row.style.display = "none";
                 }
@@ -33,6 +36,15 @@
         window.onload = function() {
             document.getElementById("showActive").checked = true; // 체크박스 기본 체크 상태 유지
             filterTable(); // 삭제된 항목 숨기기
+
+            const searchInputs = document.querySelectorAll("#tonerNameSearch");
+            searchInputs.forEach(input => {
+                input.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        filterTable();
+                    }
+                });
+            });
         };
     </script>
     <style>
@@ -78,7 +90,7 @@
     <!-- 검색 입력 필드 & 체크박스 -->
     <div class="row mb-3">
         <div class="col-md-3">
-            <input type="text" id="tonerNameSearch" class="form-control" placeholder="제품명 검색" onkeyup="filterTable()">
+            <input type="text" id="tonerNameSearch" class="form-control" placeholder="제품명 검색" >
         </div>
         <div class="col-md-3">
             <div class="form-check">
@@ -96,6 +108,7 @@
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
         <tr>
+            <th>번호</th>
             <th>제품 코드</th>
             <th>제품명</th>
             <th>단위</th>
@@ -105,7 +118,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="toner : ${tonerList}" th:attr="data-del=${toner.getDel()}">
+        <tr th:each="toner, iterStat : ${tonerList}" th:attr="data-del=${toner.getDel()}">
+            <td class="row-index" th:text="${iterStat.index + 1}">1</td>
             <td th:text="${toner.getTonerCode()}">제품 코드</td>
             <td>
                 <a th:href="@{/toner/{tonerId}/history(tonerId=${toner.getTonerId()})}"

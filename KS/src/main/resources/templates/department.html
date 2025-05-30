@@ -13,9 +13,11 @@
             let showOnlyActive = document.getElementById("showActive").checked;
             let tableRows = document.querySelectorAll("tbody tr");
 
+            let rowIndex = 1;
+
             tableRows.forEach(row => {
-                let floor = row.children[0].innerText.toLowerCase();
-                let name = row.children[1].innerText.toLowerCase();
+                let floor = row.children[1].innerText.toLowerCase();
+                let name = row.children[2].innerText.toLowerCase();
                 let delStatus = row.getAttribute("data-del"); // data-del 속성 가져오기
 
                 // 검색어 필터링
@@ -26,6 +28,7 @@
 
                 if (matchesSearch && matchesDelStatus) {
                     row.style.display = "";
+                    row.querySelector(".row-index").innerText = rowIndex++;
                 } else {
                     row.style.display = "none";
                 }
@@ -34,6 +37,15 @@
         window.onload = function() {
             document.getElementById("showActive").checked = true; // 체크박스 기본 체크 상태 유지
             filterTable(); // 삭제된 항목 숨기기
+
+            const searchInputs = document.querySelectorAll("#floorSearch, #nameSearch");
+            searchInputs.forEach(input => {
+                input.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        filterTable();
+                    }
+                });
+            });
         };
     </script>
     <style>
@@ -80,10 +92,10 @@
     <!-- 검색 입력 필드 & 체크박스 -->
     <div class="row mb-3">
         <div class="col-md-3">
-            <input type="text" id="floorSearch" class="form-control" placeholder="층 검색" onkeyup="filterTable()">
+            <input type="text" id="floorSearch" class="form-control" placeholder="층 검색">
         </div>
         <div class="col-md-3">
-            <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색" onkeyup="filterTable()">
+            <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색">
         </div>
         <div class="col-md-3">
             <div class="form-check">
@@ -100,12 +112,14 @@
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
         <tr>
+            <th>번호</th>
             <th>층</th>
             <th>부서 이름</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="list: ${departments}" th:attr="data-del=${list.getDelete()}">
+        <tr th:each="list , iterStat: ${departments}" th:attr="data-del=${list.getDelete()}">
+            <td class="row-index" th:text="${iterStat.index + 1}">1</td>
             <td>
                     <span th:text="${list.getDepartmentFloor()}"></span>
             </td>
