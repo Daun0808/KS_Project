@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -28,13 +29,21 @@ public class ComputerController {
     @GetMapping("/computer")
     public ModelAndView computerList() {
         ModelAndView mav = new ModelAndView("computer");
+
         List<Computer> computers = computerService.findAll()
                 .stream()
                 .filter(computer -> !"Y".equals(computer.getDel()))
+                .sorted(Comparator
+                        .comparing((Computer c) -> c.getDepartment().getDepartmentFloor(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(c -> c.getDepartment().getDepartmentName(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Computer::getComputerPlace, Comparator.nullsLast(Comparator.naturalOrder()))
+                )
                 .toList();
+
         mav.addObject("computers", computers);
         return mav;
     }
+
 
     @GetMapping("/computer/create")
     public ModelAndView createForm() {
