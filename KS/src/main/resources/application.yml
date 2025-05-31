@@ -23,6 +23,10 @@ spring:
     hibernate:
       ddl-auto: update #validate로 변경 예정
     defer-datasource-initialization: true   # 데이터 소스 초기화를 지연시킵니다. 이는 데이터베이스 연결을 설정하기 전에 다른 초기화 로직을 완료할 수 있게 합니다.
+  web:
+    resources:
+      cache:
+        period: 3600s
 
   application:
     name: "KS"
