@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -31,6 +32,11 @@ public class MonitorController {
         List<Monitor> monitors = monitorService.findAll()
                 .stream()
                 .filter(monitor -> !"Y".equals(monitor.getDel()))
+                .sorted(Comparator
+                        .comparing((Monitor c) -> c.getDepartment().getDepartmentFloor(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(c -> c.getDepartment().getDepartmentName(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Monitor::getMonitorPlace, Comparator.nullsLast(Comparator.naturalOrder()))
+                )
                 .toList();
         mav.addObject("monitors", monitors);
         return mav;

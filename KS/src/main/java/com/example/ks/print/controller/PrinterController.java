@@ -1,5 +1,6 @@
 package com.example.ks.print.controller;
 
+import com.example.ks.computer.domain.Computer;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.service.DepartmentService;
 import com.example.ks.print.domain.Printer;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -34,6 +36,11 @@ public class PrinterController {
         List<Printer> printers = printerService.findAll()
                 .stream()
                 .filter(printer -> !"Y".equals(printer.getDel())) // del이 "Y"인 것 제외
+                .sorted(Comparator
+                        .comparing((Printer c) -> c.getDepartment().getDepartmentFloor(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(c -> c.getDepartment().getDepartmentName(), Comparator.nullsLast(Comparator.naturalOrder()))
+                        .thenComparing(Printer::getPrintPlace, Comparator.nullsLast(Comparator.naturalOrder()))
+                )
                 .toList(); // 필터링된 프린터 리스트
         ArrayList<String> tonerName = new ArrayList<>();
         for (Printer printer : printers) {
