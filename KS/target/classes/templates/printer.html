@@ -46,42 +46,52 @@
     </style>
 
     <script>
-        function filterTable() {
-            let floorInput = document.getElementById("floorSearch").value.toLowerCase();
-            let nameInput = document.getElementById("nameSearch").value.toLowerCase();
-            let placeInput = document.getElementById("placeSearch").value.toLowerCase();
-            let printerNameInput = document.getElementById("printerNameSearch").value.toLowerCase();
-            let printerTonerInput = document.getElementById("printerTonerSearch").value.toLowerCase();
-            let showOnlyActive = document.getElementById("showActive").checked;
-            let tableRows = document.querySelectorAll("tbody tr");
+        function filterBySearchInputs() {
+            const floorInput = document.getElementById("floorSearch").value.toLowerCase();
+            const nameInput = document.getElementById("nameSearch").value.toLowerCase();
+            const placeInput = document.getElementById("placeSearch").value.toLowerCase();
+            const printerNameInput = document.getElementById("printerNameSearch").value.toLowerCase();
+            const printerTonerInput = document.getElementById("printerTonerSearch").value.toLowerCase();
+            const rows = document.querySelectorAll("tbody tr");
 
-            let rowIndex = 1;
+            rows.forEach(row => {
+                const floor = row.children[1].innerText.toLowerCase();
+                const name = row.children[2].innerText.toLowerCase();
+                const place = row.children[3].innerText.toLowerCase();
+                const printerName = row.children[4].innerText.toLowerCase();
+                const printerToner = row.children[6].innerText.toLowerCase();
 
-            tableRows.forEach(row => {
-                let floor = row.children[1].innerText.toLowerCase();
-                let name = row.children[2].innerText.toLowerCase();
-                let place = row.children[3].innerText.toLowerCase();
-                let printerName = row.children[4].innerText.toLowerCase();
-                let printerToner = row.children[6].innerText.toLowerCase();
-                let delStatus = row.getAttribute("data-del");
-
-                let matchesSearch = floor.includes(floorInput) &&
+                const matches = floor.includes(floorInput) &&
                     name.includes(nameInput) &&
                     place.includes(placeInput) &&
                     printerName.includes(printerNameInput) &&
                     printerToner.includes(printerTonerInput);
 
-                let matchesDelStatus = !showOnlyActive || delStatus === "N";
+                row.style.display = matches ? "" : "none";
+            });
+        }
 
-                if (matchesSearch && matchesDelStatus) {
+        function filterByDelStatus() {
+            const showOnlyActive = document.getElementById("showActive").checked;
+            const rows = document.querySelectorAll("tbody tr");
+
+            let index = 1;
+            rows.forEach(row => {
+                const delStatus = row.getAttribute("data-del");
+                const isVisible = row.style.display !== "none";
+
+                if (isVisible && (!showOnlyActive || delStatus === "N")) {
                     row.style.display = "";
-                    row.querySelector(".row-index").innerText = rowIndex++;
+                    row.querySelector(".row-index").innerText = index++;
                 } else {
                     row.style.display = "none";
                 }
             });
+        }
 
-
+        function filterTable() {
+            filterBySearchInputs();
+            filterByDelStatus();
         }
 
         window.onload = function () {
@@ -114,6 +124,7 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">프린터 목록</h2>
+
     <div class="row mb-3">
         <div class="col-md-2">
             <div class="form-check">

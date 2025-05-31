@@ -4,39 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>부서 관리</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <script>
-        function filterTable() {
-            let floorInput = document.getElementById("floorSearch").value.toLowerCase();
-            let nameInput = document.getElementById("nameSearch").value.toLowerCase();
-            let showOnlyActive = document.getElementById("showActive").checked;
-            let tableRows = document.querySelectorAll("tbody tr");
+        function filterBySearchInputs() {
+            const floorInput = document.getElementById("floorSearch").value.toLowerCase();
+            const nameInput = document.getElementById("nameSearch").value.toLowerCase();
+            const rows = document.querySelectorAll("tbody tr");
 
-            let rowIndex = 1;
+            rows.forEach(row => {
+                const floor = row.children[1].innerText.toLowerCase();
+                const name = row.children[2].innerText.toLowerCase();
 
-            tableRows.forEach(row => {
-                let floor = row.children[1].innerText.toLowerCase();
-                let name = row.children[2].innerText.toLowerCase();
-                let delStatus = row.getAttribute("data-del"); // data-del 속성 가져오기
+                const matches = floor.includes(floorInput) && name.includes(nameInput);
+                row.style.display = matches ? "" : "none";
+            });
+        }
 
-                // 검색어 필터링
-                let matchesSearch = floor.includes(floorInput) && name.includes(nameInput);
+        function filterByDelStatus() {
+            const showOnlyActive = document.getElementById("showActive").checked;
+            const rows = document.querySelectorAll("tbody tr");
 
-                // 체크박스 필터링 (showOnlyActive가 true이면 'N'인 것만 표시)
-                let matchesDelStatus = !showOnlyActive || delStatus === "N";
+            let index = 1;
+            rows.forEach(row => {
+                const delStatus = row.getAttribute("data-del");
+                const isVisible = row.style.display !== "none";
 
-                if (matchesSearch && matchesDelStatus) {
+                if (isVisible && (!showOnlyActive || delStatus === "N")) {
                     row.style.display = "";
-                    row.querySelector(".row-index").innerText = rowIndex++;
+                    row.querySelector(".row-index").innerText = index++;
                 } else {
                     row.style.display = "none";
                 }
             });
         }
+
+        function filterTable() {
+            filterBySearchInputs();
+            filterByDelStatus();
+        }
+
         window.onload = function() {
-            document.getElementById("showActive").checked = true; // 체크박스 기본 체크 상태 유지
-            filterTable(); // 삭제된 항목 숨기기
+            document.getElementById("showActive").checked = true;
+            filterTable();
 
             const searchInputs = document.querySelectorAll("#floorSearch, #nameSearch");
             searchInputs.forEach(input => {
@@ -48,27 +58,26 @@
             });
         };
     </script>
+
     <style>
-        /* 상단 고정 메뉴바 스타일 */
         .navbar-fixed {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000; /* 메뉴바가 다른 요소들보다 위에 표시되도록 */
-            background-color: #f8f9fa; /* 밝은 배경 */
-            padding: 5px 20px; /* 메뉴바 높이 조정 */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 메뉴바에 그림자 추가 */
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-btn {
-            font-size: 1rem; /* 버튼 크기 조정 */
-            margin-right: 15px; /* 버튼들 간의 간격 */
+            font-size: 1rem;
+            margin-right: 15px;
         }
 
-        /* 페이지 내용이 메뉴바와 겹치지 않도록 여백 추가 */
         body {
-            padding-top: 60px; /* 메뉴바 높이에 맞춰 페이지 내용이 겹치지 않도록 여백 추가 */
+            padding-top: 60px;
         }
     </style>
 </head>
@@ -109,6 +118,7 @@
             </a>
         </div>
     </div>
+
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
         <tr>
@@ -120,9 +130,7 @@
         <tbody>
         <tr th:each="list , iterStat: ${departments}" th:attr="data-del=${list.getDelete()}">
             <td class="row-index" th:text="${iterStat.index + 1}">1</td>
-            <td>
-                    <span th:text="${list.getDepartmentFloor()}"></span>
-            </td>
+            <td><span th:text="${list.getDepartmentFloor()}"></span></td>
             <td>
                 <a th:href="@{/department/{department_id}(department_id=${list.getDepartmentId()})}">
                     <span th:text="${list.getDepartmentName()}"></span>
@@ -132,7 +140,7 @@
         </tbody>
     </table>
 </div>
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
