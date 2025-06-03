@@ -106,6 +106,7 @@
             <th>제품명</th>
             <th>단위</th>
             <th>비고</th>
+            <th>적정 수량</th>
             <th>삭제 상태</th>
             <th>수정</th>
         </tr>
@@ -121,6 +122,7 @@
             </td>
             <td th:text="${toner.getTonerUnit()}">단위</td>
             <td th:text="${toner.getTonerText()}">비고</td>
+            <td th:text="${toner.getTonerQuantity()}">적정 재고</td>
             <td th:text="${toner.getDel()}">삭제 상태</td>
             <td>
                 <a th:href="@{/toner/edit/{tonerId}(tonerId=${toner.getTonerId()})}" class="btn btn-warning btn-sm">수정</a>
