@@ -101,6 +101,7 @@
             <th>입고 수량</th>
             <th>출고 수량</th>
             <th>현재 수량</th>
+            <th>적정 재고</th>
         </tr>
         </thead>
         <tbody>
@@ -115,6 +116,7 @@
             <td th:text="${tm.tonerMonthReceived}" class="text-end">0</td>
             <td th:text="${tm.tonerMonthDelivery}" class="text-end">0</td>
             <td th:text="${tm.tonerCurrentMonth}" class="text-end fw-bold">0</td>
+            <td th:text="${tonerQuantity[iterStat.index]}" class="text-end">0</td>
         </tr>
         </tbody>
     </table>
