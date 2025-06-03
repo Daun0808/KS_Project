@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,10 +37,16 @@ public class TonerMonthController {
         }
 
         List<TonerMonth> tonerMonthList = tonerMonthService.findByTonerMonthDate(selectedDate);
-
+        ArrayList<Integer> tonerQuantity = new ArrayList<>();
+        if (!tonerMonthList.isEmpty()) {
+            for (TonerMonth tonerMonth : tonerMonthList) {
+                tonerQuantity.add(tonerService.findByTonerName(tonerMonth.getTonerName()).getTonerQuantity());
+;            }
+        }
         ModelAndView mav = new ModelAndView("tonerMonth");
         mav.addObject("tonerMonthList", tonerMonthList);
         mav.addObject("selectedDate", selectedDate);
+        mav.addObject("tonerQuantity", tonerQuantity);
         return mav;
     }
 
