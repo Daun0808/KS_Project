@@ -118,8 +118,6 @@ public class TonerHistoryService {
             throw new RuntimeException("월 재고 정리가 안됐습니다. 재고 마감 후 입력 가능합니다.");
         }
 
-        tonerService.tonerQuantity(toner.getTonerId(), (toner.getTonerQuantity()
-                + tonerHistory.getHistoryDelivery()));
         return tonerHistoryRepository.save(tonerHistory);
     }
 

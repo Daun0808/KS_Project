@@ -42,14 +42,4 @@ public class TonerService {
         tonerRepository.save(toner);
     }
 
-    public void tonerQuantity(Integer tonerId, Integer quantity) {
-        Toner toner = tonerRepository.findByTonerId(tonerId);
-        if (toner == null) {
-            throw new RuntimeException("토너를 찾을 수 없습니다. ID: " + tonerId);
-        }
-        toner.updateQuantity(quantity);
-        tonerRepository.save(toner);
-    }
-
-
 }
