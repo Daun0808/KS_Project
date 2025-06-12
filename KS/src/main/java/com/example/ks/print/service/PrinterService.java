@@ -54,4 +54,5 @@ public class PrinterService {
         printer.Update(updatePrinter, department);
         printerRepository.save(printer);
     }
+
 }
