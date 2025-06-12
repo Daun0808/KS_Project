@@ -187,7 +187,9 @@
                 </td>
                 <td th:text="${printer.getPrintUniqueNumber()}">원내 고유 번호</td>
                 <td th:text="${tonerName[iterStat.index]}">토너</td>
-                <td th:text="${printer.printIp}">IP 주소</td>
+                <td>
+                    <a th:href="'http://50.50.' + ${printer.getPrintIp()}" th:text="${printer.printIp}" target="_blank"></a>
+                </td>
                 <td th:text="${printer.printPlaceDate}">배치일</td>
                 <td th:text="${printer.printDel}">폐기여부</td>
                 <td th:text="${printer.printText}">비고</td>
