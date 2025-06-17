@@ -1,6 +1,5 @@
 package com.example.ks.print.controller;
 
-import com.example.ks.computer.domain.Computer;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.service.DepartmentService;
 import com.example.ks.print.domain.Printer;
