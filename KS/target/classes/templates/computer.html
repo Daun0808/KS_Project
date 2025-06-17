@@ -94,6 +94,7 @@
         <th>CPU</th>
         <th>메모리</th>
         <th>메모</th>
+        <th>s1</th>
         <th>고유 번호</th>
         <th>폐기 여부</th>
       </tr>
@@ -112,6 +113,7 @@
         <td th:text="${computer.getComputerCpu()}">CPU</td>
         <td th:text="${computer.getComputerMemory()}">메모리</td>
         <td th:text="${computer.getComputerText()}">메모</td>
+        <td th:text="${computer.getComputerS1()}">s1</td>
         <td th:text="${computer.getComputerUniqueCode()}">고유 번호</td>
         <td th:text="${computer.getComputerDel()}">폐기 여부</td>
       </tr>
