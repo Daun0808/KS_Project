@@ -27,5 +27,6 @@ public record CreateComputer(
         @Size(max = 1) String computerDel,
         @Size(max = 50) String computerDelText,
         @NotBlank @Size(max = 1) String del,
-        @NotNull String departmentId
+        @NotNull String departmentId,
+        @Size(max = 30) String computerOsKey
 ) {}

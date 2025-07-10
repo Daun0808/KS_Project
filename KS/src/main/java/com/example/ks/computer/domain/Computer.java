@@ -84,6 +84,9 @@ public class Computer {
     @Column(name = "del", nullable = false, length = 1)
     private String del;
 
+    @Column( name = "computer_os_key")
+    private String computerOsKey;
+
     @Builder
     public Computer(
             Department department,
@@ -105,7 +108,8 @@ public class Computer {
             String computerDel,
             String computerDelText,
             String del,
-            LocalDate computerDelDate
+            LocalDate computerDelDate,
+            String computerOskey
     ) {
         this.department = department;
         this.computerPlace = computerPlace;
@@ -127,6 +131,7 @@ public class Computer {
         this.computerDelText = computerDelText;
         this.del = del;
         this.computerDelDate = computerDelDate;
+        this.computerOsKey = computerOskey;
     }
 
     public static Computer toEntity(CreateComputer dto, Department department) {
@@ -151,6 +156,7 @@ public class Computer {
                 .computerDelText(dto.computerDelText())
                 .del(dto.del())
                 .computerDelDate(null)
+                .computerOskey(dto.computerOsKey())
                 .build();
     }
 
@@ -174,6 +180,7 @@ public class Computer {
         this.computerDel = dto.computerDel();
         this.computerDelDate = dto.computerDelDate();
         this.computerDelText = dto.computerDelText();
+        this.computerOsKey = dto.computerOsKey();
     }
 
     public void delete(String del){
