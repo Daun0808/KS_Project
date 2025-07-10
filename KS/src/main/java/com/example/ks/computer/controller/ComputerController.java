@@ -26,6 +26,7 @@ public class ComputerController {
     private final DepartmentService departmentService;
     private final MonitorService monitorService;
 
+
     @GetMapping("/computer")
     public ModelAndView computerList() {
         ModelAndView mav = new ModelAndView("computer");
@@ -98,4 +99,5 @@ public class ComputerController {
         computerService.delete(computerId);
         return "redirect:/computer";
     }
+
 }
