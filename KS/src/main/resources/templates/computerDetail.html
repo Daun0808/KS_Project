@@ -66,6 +66,7 @@
       <p class="card-text"><strong>폐기 날짜:</strong> <span th:text="${computer.computerDelDate}"></span></p>
       <p class="card-text"><strong>폐기 사유:</strong> <span th:text="${computer.computerDelText}"></span></p>
       <p class="card-text"><strong>플래그 값:</strong> <span th:text="${computer.del}"></span></p>
+      <p class="card-text"><strong>OS 키값:</strong> <span th:text="${computer.getComputerOsKey()}"></span></p>
       <hr>
       <p class="card-text"><strong>소속 부서:</strong>
         <a th:href="@{/department/{id}(id=${computer.department.departmentId})}"

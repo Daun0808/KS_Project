@@ -97,6 +97,7 @@
         <th>s1</th>
         <th>고유 번호</th>
         <th>폐기 여부</th>
+        <th>OS_Key</th>
       </tr>
       </thead>
       <tbody>
@@ -116,6 +117,7 @@
         <td th:text="${computer.getComputerS1()}">s1</td>
         <td th:text="${computer.getComputerUniqueCode()}">고유 번호</td>
         <td th:text="${computer.getComputerDel()}">폐기 여부</td>
+        <td th:text="${computer.getComputerOsKey()}">OS_key</td>
       </tr>
       </tbody>
     </table>
