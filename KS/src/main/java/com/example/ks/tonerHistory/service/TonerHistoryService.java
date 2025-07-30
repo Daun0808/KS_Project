@@ -81,7 +81,8 @@ public class TonerHistoryService {
                         ,tonerMonth.getTonerMonthDelivery()
                         ));
                 tonerMonthRepository.save(tonerMonth);
-            }else if (!tonerHistory.getHistoryDelivery().equals(updateTonerHistory.historyDelivery())){
+            }
+            if (!tonerHistory.getHistoryDelivery().equals(updateTonerHistory.historyDelivery())){
                 tonerMonth.update(new UpdateTonerMonth(
                         tonerMonth.getTonerCurrentMonth() + tonerHistory.getHistoryDelivery() - updateTonerHistory.historyDelivery()
                         ,tonerMonth.getTonerMonthReceived()
