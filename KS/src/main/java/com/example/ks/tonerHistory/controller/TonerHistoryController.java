@@ -5,6 +5,7 @@ import com.example.ks.toner.domain.Toner;
 import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerHistory.domain.TonerHistory;
 import com.example.ks.tonerHistory.dto.CreateTonerHistory;
+import com.example.ks.tonerHistory.dto.DateTonerHistory;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
 import com.example.ks.tonerHistory.service.TonerHistoryService;
 import jakarta.validation.Valid;
@@ -107,7 +108,8 @@ public class TonerHistoryController {
 
     @GetMapping("/history/data")
     public ModelAndView dataTonerHistory() {
-        List<TonerHistory> tonerHistoryList = tonerHistoryService.getTonerHistoryAll();
+        List<DateTonerHistory> tonerHistoryList =
+                tonerHistoryService.getTonerHistoryAll();
         ModelAndView modelAndView = new ModelAndView("tonerHistoryAll");
         modelAndView.addObject("tonerHistoryList", tonerHistoryList);
         return modelAndView;

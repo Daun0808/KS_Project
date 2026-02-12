@@ -5,6 +5,7 @@ import com.example.ks.toner.repository.TonerRepository;
 import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerHistory.domain.TonerHistory;
 import com.example.ks.tonerHistory.dto.CreateTonerHistory;
+import com.example.ks.tonerHistory.dto.DateTonerHistory;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
 import com.example.ks.tonerHistory.repository.TonerHistoryRepository;
 import com.example.ks.tonerMonth.domain.TonerMonth;
@@ -128,9 +129,27 @@ public class TonerHistoryService {
                 .orElseThrow(() -> new RuntimeException("토너 히스토리를 찾을 수 없습니다."));
     }
 
-    @Transactional(readOnly = true)
-    public  List<TonerHistory> getTonerHistoryAll() {
-        return tonerHistoryRepository.findAll();
+    public List<DateTonerHistory> getTonerHistoryAll() {
+
+        return tonerHistoryRepository.findAll()
+                .stream()
+
+                // 🔥 1️⃣ del = 'Y' 제외
+                .filter(history -> !"Y".equals(history.getDel()))
+
+                // 🔥 2️⃣ delivery = 0 제외 (null 방어 포함)
+                .filter(history -> history.getHistoryDelivery() != null
+                        && history.getHistoryDelivery() != 0)
+
+                // 🔥 DTO 변환
+                .map(history -> new DateTonerHistory(
+                        history.getHistoryDate(),
+                        history.getDepartmentName(),
+                        history.getToner().getTonerName(),
+                        history.getHistoryDelivery()
+                ))
+                .toList();
     }
+
 
 }
