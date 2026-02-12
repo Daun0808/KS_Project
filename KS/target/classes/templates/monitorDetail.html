@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>모니터 상세 정보</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #f8f9fa;
+      padding: 5px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-btn {
+      font-size: 1rem;
+      margin-right: 15px;
+    }
+
+    body {
+      padding-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 상단 메뉴바 -->
+<div class="navbar-fixed">
+  <div class="container d-flex justify-content-start">
+    <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+    <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+    <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+    <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+    <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+    <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+    <a href="/monitor" class="btn btn-outline-dark navbar-btn">모니터 관리</a>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">모니터 상세 정보</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">설치 장소: <span th:text="${monitor.monitorPlace}"></span></h5>
+      <p class="card-text"><strong>고유번호:</strong> <span th:text="${monitor.monitorUnique}"></span></p>
+      <p class="card-text"><strong>제조사:</strong> <span th:text="${monitor.monitorManufacturer}"></span></p>
+      <p class="card-text"><strong>사이즈:</strong> <span th:text="${monitor.monitorSize}"></span></p>
+      <p class="card-text"><strong>구매일:</strong> <span th:text="${monitor.monitorSaleDate}"></span></p>
+      <p class="card-text"><strong>비고:</strong> <span th:text="${monitor.monitorText}"></span></p>
+      <p class="card-text"><strong>폐기 상태:</strong> <span th:text="${monitor.monitorDel}"></span></p>
+      <p class="card-text"><strong>폐기 날짜:</strong> <span th:text="${monitor.monitorDelDate}"></span></p>
+      <p class="card-text"><strong>폐기 사유:</strong> <span th:text="${monitor.monitorDelText}"></span></p>
+      <p class="card-text"><strong>플래그 값(del):</strong> <span th:text="${monitor.del}"></span></p>
+      <hr>
+      <p class="card-text"><strong>소속 부서:</strong>
+        <a th:href="@{/department/{id}(id=${monitor.department.departmentId})}"
+           th:text="${monitor.department.departmentName + ' (' + monitor.department.departmentFloor + '층)'}"></a>
+      </p>
+    </div>
+
+    <div class="mt-4">
+      <h5>사용중인 컴퓨터</h5>
+      <ul class="list-group">
+        <li class="list-group-item" th:each="computer : ${computers}"
+            th:if="${monitor.monitorPlace == computer.computerPlace
+            and monitor.department.departmentId == computer.department.departmentId}">
+        <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}"
+             th:text="${ '( ' + computer.department.getDepartmentFloor() + '층 '+ computer.getDepartment().getDepartmentName() + ' )' +computer.getComputerPlace()}">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="/monitor" class="btn btn-secondary">목록으로 돌아가기</a>
+    <a th:href="@{/monitor/update/{monitor_id}(monitor_id=${monitor.monitorId})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/monitor/delete/{monitor_id}(monitor_id=${monitor.monitorId})}" class="btn btn-danger"
+       onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
