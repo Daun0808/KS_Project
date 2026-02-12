@@ -104,4 +104,12 @@ public class TonerHistoryController {
         TonerHistory tonerHistory = tonerHistoryService.deleteTonerHistory(historyId);
         return "redirect:/toner/" + tonerHistory.getToner().getTonerId() + "/history";
     }
+
+    @GetMapping("/history/data")
+    public ModelAndView dataTonerHistory() {
+        List<TonerHistory> tonerHistoryList = tonerHistoryService.getTonerHistoryAll();
+        ModelAndView modelAndView = new ModelAndView("tonerHistoryAll");
+        modelAndView.addObject("tonerHistoryList", tonerHistoryList);
+        return modelAndView;
+    }
 }
