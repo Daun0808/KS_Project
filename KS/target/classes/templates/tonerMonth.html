@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>월별 토너 재고</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+    </style>
+
+    <script>
+        function filterTable() {
+            let tonerNameInput = document.getElementById("tonerNameSearch").value.toLowerCase();
+            let tableRows = document.querySelectorAll("tbody tr");
+            let rowIndex = 1;
+
+            tableRows.forEach(row => {
+                let tonerName = row.children[1].innerText.toLowerCase();
+                if (tonerName.includes(tonerNameInput)) {
+                    row.style.display = "";
+                    row.querySelector(".row-index").innerText = rowIndex++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        window.onload = function () {
+            document.getElementById("tonerNameSearch").addEventListener("keydown", function (event) {
+                if (event.key === "Enter") {
+                    filterTable();
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+<!-- 상단 고정 메뉴바 -->
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+        <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+        <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+        <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+        <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">월별 토너 재고 현황</h2>
+
+    <!-- 검색 및 날짜 선택 -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text" id="tonerNameSearch" class="form-control" placeholder="제품명 검색">
+        </div>
+
+        <div class="col-md-4">
+            <form method="get" action="/toner/month" class="d-flex">
+                <input type="month" id="date" name="date"
+                       class="form-control me-2"
+                       value="${selectedDate != null ? selectedDate.toString().substring(0, 7) : ''}">
+                <button type="submit" class="btn btn-primary">조회</button>
+            </form>
+        </div>
+
+        <div class="col-md-4 text-end">
+            <a th:href="@{/toner/history/data}" class="btn btn-info me-2">
+                토너 통계
+            </a>
+
+            <a th:href="@{/toner/month/create}" class="btn btn-warning">
+                재고 마감
+            </a>
+        </div>
+    </div>
+
+    <!-- 재고 테이블 -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark text-center">
+        <tr>
+            <th>번호</th>
+            <th>제품명</th>
+            <th>마감일</th>
+            <th>이월 수량</th>
+            <th>입고 수량</th>
+            <th>출고 수량</th>
+            <th>현재 수량</th>
+            <th>적정 재고</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tm, iterStat : ${tonerMonthList}">
+            <td class="row-index" th:text="${iterStat.index + 1}">1</td>
+            <td>
+                <a th:href="@{/toner/month/{toner_name}/history(toner_name=${tm.tonerName})}"
+                   th:text="${tm.tonerName}"></a>
+            </td>
+            <td th:text="${#temporals.format(tm.tonerMonthDate, 'yyyy-MM')}">마감일</td>
+            <td th:text="${tm.tonerPreviousMonth}" class="text-end">0</td>
+            <td th:text="${tm.tonerMonthReceived}" class="text-end">0</td>
+            <td th:text="${tm.tonerMonthDelivery}" class="text-end">0</td>
+            <td th:text="${tm.tonerCurrentMonth}" class="text-end fw-bold">0</td>
+            <td th:text="${tonerQuantity[iterStat.index]}" class="text-end">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
