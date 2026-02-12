@@ -127,4 +127,10 @@ public class TonerHistoryService {
         return tonerHistoryRepository.findById(historyId)
                 .orElseThrow(() -> new RuntimeException("토너 히스토리를 찾을 수 없습니다."));
     }
+
+    @Transactional(readOnly = true)
+    public  List<TonerHistory> getTonerHistoryAll() {
+        return tonerHistoryRepository.findAll();
+    }
+
 }
