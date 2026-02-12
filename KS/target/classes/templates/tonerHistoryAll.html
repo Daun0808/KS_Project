@@ -208,10 +208,10 @@
         </thead>
         <tbody>
         <tr th:each="history : ${tonerHistoryList}">
-            <td th:text="${history.historyDate}"></td>
-            <td th:text="${history.departmentName}"></td>
-            <td th:text="${history.getToner().getTonerName()}"></td>
-            <td th:text="${history.getHistoryDelivery()}"></td>
+            <td th:text="${history.historyDate()}"></td>
+            <td th:text="${history.departmentName()}"></td>
+            <td th:text="${history.tonerName()}"></td>
+            <td th:text="${history.historyDelivery()}"></td>
         </tr>
         </tbody>
     </table>
