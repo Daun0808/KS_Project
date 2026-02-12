@@ -68,6 +68,7 @@ com\example\ks\computer\controller\ComputerController.class
 com\example\ks\tonerHistory\dto\UpdateTonerHistory$UpdateTonerHistoryBuilder.class
 com\example\ks\computer\dto\UpdateComputer$UpdateComputerBuilder.class
 com\example\ks\print\domain\Printer.class
+com\example\ks\tonerHistory\dto\DateTonerHistory.class
 com\example\ks\tonerHistory\dto\UpdateTonerHistory.class
 com\example\ks\monitor\dto\CreateMonitor$CreateMonitorBuilder.class
 com\example\ks\monitor\controller\MonitorController.class
