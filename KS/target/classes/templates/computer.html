@@ -88,6 +88,7 @@
         <th>층</th>
         <th>부서</th>
         <th>설치 장소</th>
+        <th>설치일</th>
         <th>IP</th>
         <th>모델</th>
         <th>OS</th>
@@ -108,6 +109,7 @@
         <td>
           <a th:href="@{'/computer/' + ${computer.getComputerId()}}" th:text="${computer.getComputerPlace()}"></a>
         </td>
+        <td th:text="${computer.getComputerPlaceDate()}">설치일</td>
         <td th:text="${computer.getComputerIp()}">IP</td>
         <td th:text="${computer.getComputerModel()}">모델</td>
         <td th:text="${computer.getComputerOs()}">OS</td>
@@ -139,7 +141,7 @@
       const floor = row.cells[1].innerText.toLowerCase();
       const name = row.cells[2].innerText.toLowerCase();
       const place = row.cells[3].innerText.toLowerCase();
-      const ip = row.cells[4].innerText.toLowerCase();
+      const ip = row.cells[5].innerText.toLowerCase();
 
       // 검색어 조건만 검사, 일단 보이게 설정
       if (

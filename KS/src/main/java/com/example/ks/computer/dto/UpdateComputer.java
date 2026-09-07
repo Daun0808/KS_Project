@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Builder
 public record UpdateComputer(
         @NotBlank @Size(max = 30) String computerPlace,
+        LocalDate computerPlaceDate,
         @Size(max = 30) String computerOs,
         @Size(max = 30) String computerIp,
         @Size(max = 30) String computerHwp,

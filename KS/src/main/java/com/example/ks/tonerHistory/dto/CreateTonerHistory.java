@@ -1,7 +1,5 @@
 package com.example.ks.tonerHistory.dto;
 
-import com.example.ks.department.domain.Department;
-import com.example.ks.toner.domain.Toner;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

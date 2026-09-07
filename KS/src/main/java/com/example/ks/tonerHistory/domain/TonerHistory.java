@@ -1,6 +1,5 @@
 package com.example.ks.tonerHistory.domain;
 
-import com.example.ks.department.domain.Department;
 import com.example.ks.toner.domain.Toner;
 import com.example.ks.tonerHistory.dto.CreateTonerHistory;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
