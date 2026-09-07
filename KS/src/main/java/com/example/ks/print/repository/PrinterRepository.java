@@ -1,7 +1,5 @@
 package com.example.ks.print.repository;
 
-import com.example.ks.computer.domain.Computer;
-import com.example.ks.department.domain.Department;
 import com.example.ks.print.domain.Printer;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

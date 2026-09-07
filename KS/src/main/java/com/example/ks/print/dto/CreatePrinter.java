@@ -1,6 +1,5 @@
 package com.example.ks.print.dto;
 
-import com.example.ks.department.domain.Department;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

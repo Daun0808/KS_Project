@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>컴퓨터 이력</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+        <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+        <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+        <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+        <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+    </div>
+</div>
+<div class="container my-5">
+
+    <!-- 컴퓨터 기본 정보 -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h4 class="card-title mb-3">컴퓨터 기본 정보</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <strong>설치 장소:</strong>
+                    <span th:text="${computer.computerPlace}"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>소속 부서:</strong>
+                    <span th:text="${computer.department.departmentName} + ' (' + ${computer.department.departmentFloor} + '층)'"></span>
+                </li>
+                <li class="list-group-item">
+                    <strong>현재 설치일:</strong>
+                    <span th:text="${computer.computerPlaceDate}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 설치일 / 부서이동 이력 -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="card-title">설치일 / 부서이동 이력</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center">
+                    <thead class="table-success">
+                    <tr>
+                        <th>구분</th>
+                        <th>이전 부서명</th>
+                        <th>신규 부서명</th>
+                        <th>설치일</th>
+                        <th>메모</th>
+                        <th>관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="h : ${history}">
+                        <td th:text="${h.historyTag}">구분</td>
+                        <td th:text="${h.departmentBeforeName}">이전부서</td>
+                        <td th:text="${h.departmentNewName}">신규부서</td>
+                        <td th:text="${h.placeDate}">설치일</td>
+                        <td th:text="${h.historyText}">메모</td>
+                        <td>
+                            <a th:href="@{/computer/history/edit/{id}(id=${h.computerHistoryId})}" class="btn btn-sm btn-outline-primary">수정</a>
+                            <a th:href="@{/computer/history/delete/{id}(id=${h.computerHistoryId})}" class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(history)}">
+                        <td colspan="6">기록된 이력이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}" class="btn btn-outline-secondary px-4">
+            컴퓨터 상세로 돌아가기
+        </a>
+        <a href="/computer" class="btn btn-outline-secondary px-4">
+            컴퓨터 목록으로 돌아가기
+        </a>
+    </div>
+</div>
+</body>
+</html>

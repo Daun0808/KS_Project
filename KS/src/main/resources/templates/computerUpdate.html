@@ -53,6 +53,11 @@
     </div>
 
     <div class="mb-3">
+      <label class="form-label">설치일</label>
+      <input type="date" class="form-control" name="computerPlaceDate" th:value="${computer.computerPlaceDate}">
+    </div>
+
+    <div class="mb-3">
       <label class="form-label">OS</label>
       <input type="text" class="form-control" th:field="*{computerOs}">
     </div>

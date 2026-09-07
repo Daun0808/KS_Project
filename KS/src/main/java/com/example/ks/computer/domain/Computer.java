@@ -4,7 +4,6 @@ import com.example.ks.computer.dto.CreateComputer;
 import com.example.ks.computer.dto.UpdateComputer;
 import com.example.ks.department.domain.Department;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -87,10 +86,14 @@ public class Computer {
     @Column( name = "computer_os_key")
     private String computerOsKey;
 
+    @Column(name = "computer_place_date")
+    private LocalDate computerPlaceDate;
+
     @Builder
     public Computer(
             Department department,
             String computerPlace,
+            LocalDate computerPlaceDate,
             String computerOs,
             String computerIp,
             String computerHwp,
@@ -113,6 +116,7 @@ public class Computer {
     ) {
         this.department = department;
         this.computerPlace = computerPlace;
+        this.computerPlaceDate = computerPlaceDate;
         this.computerOs = computerOs;
         this.computerIp = computerIp;
         this.computerHwp = computerHwp;
@@ -138,6 +142,7 @@ public class Computer {
         return Computer.builder()
                 .department(department)
                 .computerPlace(dto.computerPlace())
+                .computerPlaceDate(dto.computerPlaceDate())
                 .computerOs(dto.computerOs())
                 .computerIp(dto.computerIp())
                 .computerHwp(dto.computerHwp())
@@ -163,6 +168,7 @@ public class Computer {
     public void update(UpdateComputer dto, Department department) {
         this.department = department;
         this.computerPlace = dto.computerPlace();
+        this.computerPlaceDate = dto.computerPlaceDate();
         this.computerOs = dto.computerOs();
         this.computerIp = dto.computerIp();
         this.computerHwp = dto.computerHwp();

@@ -48,6 +48,7 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">설치 장소: <span th:text="${computer.computerPlace}"></span></h5>
+      <p class="card-text"><strong>설치일:</strong> <span th:text="${computer.computerPlaceDate}"></span></p>
       <p class="card-text"><strong>용도:</strong> <span th:text="${computer.computerUse}"></span></p>
       <p class="card-text"><strong>모델명:</strong> <span th:text="${computer.computerModel}"></span></p>
       <p class="card-text"><strong>IP 주소:</strong> <span th:text="${computer.computerIp}"></span></p>
@@ -90,6 +91,7 @@
   <div class="mt-4">
     <a href="/computer" class="btn btn-secondary">목록으로 돌아가기</a>
     <a th:href="@{/computer/update/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/computer/{computer_id}/history(computer_id=${computer_id})}" class="btn btn-outline-info">이력 보기</a>
     <a th:href="@{/computer/delete/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
   </div>
 </div>
