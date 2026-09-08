@@ -14,7 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/toner")
@@ -77,6 +80,68 @@ public class TonerHistoryController {
                                      @PathVariable("toner_id") int tonerId) {
         tonerHistoryService.createTonerHistory(dto);
         return "redirect:/toner/" + tonerId + "/history";
+    }
+
+    // 토너 여러 개 일괄 입고 등록 폼
+    @GetMapping("/history/bulk-create")
+    public ModelAndView bulkCreateTonerHistoryForm() {
+        ModelAndView modelAndView = new ModelAndView("tonerHistoryBulkCreate");
+        List<Toner> tonerList = tonerService.findAll().stream()
+                .filter(toner -> "N".equals(toner.getDel()))
+                .toList();
+        modelAndView.addObject("tonerList", tonerList);
+        modelAndView.addObject("departmentList", departmentService.findAll()
+                .stream()
+                .filter(dept -> "N".equals(dept.getDelete()))
+                .toList());
+        return modelAndView;
+    }
+
+    // 토너 여러 개 일괄 입고 처리
+    @PostMapping("/history/bulk-create")
+    public ModelAndView bulkCreateTonerHistory(
+            @RequestParam("historyDate") LocalDate historyDate,
+            @RequestParam("departmentName") String departmentName,
+            @RequestParam(value = "historyText", required = false) String historyText,
+            @RequestParam Map<String, String> params) {
+
+        List<String> successList = new ArrayList<>();
+        List<String> failList = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (!entry.getKey().startsWith("qty_")) continue;
+
+            int tonerId = Integer.parseInt(entry.getKey().substring(4));
+            int quantity;
+            try {
+                quantity = Integer.parseInt(entry.getValue());
+            } catch (NumberFormatException e) {
+                continue;
+            }
+            if (quantity <= 0) continue;
+
+            Toner toner = tonerService.findByTonerId(tonerId);
+            try {
+                CreateTonerHistory dto = CreateTonerHistory.builder()
+                        .tonerId(tonerId)
+                        .historyDate(historyDate)
+                        .historyReceived(quantity)
+                        .historyDelivery(0)
+                        .historyText(historyText)
+                        .del("N")
+                        .departmentName(departmentName)
+                        .build();
+                tonerHistoryService.createTonerHistory(dto);
+                successList.add(toner.getTonerName() + " " + quantity + toner.getTonerUnit() + " 입고");
+            } catch (RuntimeException e) {
+                failList.add(toner.getTonerName() + ": " + e.getMessage());
+            }
+        }
+
+        ModelAndView modelAndView = new ModelAndView("tonerHistoryBulkResult");
+        modelAndView.addObject("successList", successList);
+        modelAndView.addObject("failList", failList);
+        return modelAndView;
     }
 
     // 토너 히스토리 수정 폼
