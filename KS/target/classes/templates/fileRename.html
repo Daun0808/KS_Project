@@ -14,15 +14,19 @@
 <script>
     function moveLast3ToFrontWithUnderscore(fileName) {
         const dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex === -1 || dotIndex < 3) return null;
+        if (dotIndex === -1) return null;
 
         const name = fileName.substring(0, dotIndex);
         const ext = fileName.substring(dotIndex);
-        if (name.length < 3) return null;
 
-        const last3 = name.slice(-3);
-        const remaining = name.slice(0, -3);
-        return `${last3}_${remaining}${ext}`;
+        // 차트번호_날짜_컬러_방향_이름_숫자 -> 이름_차트번호_날짜_컬러_방향 (숫자는 버림)
+        const parts = name.split("_");
+        if (parts.length < 2) return null;
+
+        const nameField = parts[parts.length - 2]; // 이름 (맨 앞으로 이동)
+        const rest = parts.slice(0, parts.length - 2); // 차트번호_날짜_컬러_방향 (숫자는 제외)
+
+        return `${[nameField, ...rest].join("_")}${ext}`;
     }
 
     async function processFiles() {
