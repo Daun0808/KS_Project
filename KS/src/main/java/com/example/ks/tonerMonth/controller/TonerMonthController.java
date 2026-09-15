@@ -16,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -36,11 +38,11 @@ public class TonerMonthController {
         }
 
         List<TonerMonth> tonerMonthList = tonerMonthService.findByTonerMonthDate(selectedDate);
+        Map<String, Integer> tonerQuantityByName = tonerService.findAll().stream()
+                .collect(Collectors.toMap(Toner::getTonerName, Toner::getTonerQuantity, (a, b) -> a));
         ArrayList<Integer> tonerQuantity = new ArrayList<>();
-        if (!tonerMonthList.isEmpty()) {
-            for (TonerMonth tonerMonth : tonerMonthList) {
-                tonerQuantity.add(tonerService.findByTonerName(tonerMonth.getTonerName()).getTonerQuantity());
-;            }
+        for (TonerMonth tonerMonth : tonerMonthList) {
+            tonerQuantity.add(tonerQuantityByName.get(tonerMonth.getTonerName()));
         }
         ModelAndView mav = new ModelAndView("tonerMonth");
         mav.addObject("tonerMonthList", tonerMonthList);

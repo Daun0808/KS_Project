@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,26 +30,16 @@ public class TonerMonthService {
     }
 
     public void createTonerMonth(CreateTonerMonthList dto) {
-        List<TonerMonth> tonerMonth = findByTonerMonthDate(dto.tonerMonthList().getFirst().tonerMonthDate());
+        List<TonerMonth> existingList = findByTonerMonthDate(dto.tonerMonthList().getFirst().tonerMonthDate());
+        Set<String> existingNames = existingList.stream()
+                .map(TonerMonth::getTonerName)
+                .collect(Collectors.toSet());
 
         for (CreateTonerMonth item : dto.tonerMonthList()) {
-            String tonerName = item.tonerName();
-            LocalDate date = item.tonerMonthDate();
-
-            // 연도, 월 추출
-            int year = date.getYear();
-            int month = date.getMonthValue();
-
-            // 기존 데이터 조회
-            TonerMonth existing = tonerMonthRepository.findByYearAndMonthAndTonerName(year, month, tonerName);
-
-            if (existing != null) {
+            if (existingNames.contains(item.tonerName())) {
                 throw new RuntimeException("재고 마감이 이미 됐습니다.");
-            } else {
-                // 새로 저장
-                TonerMonth newTonerMonth = TonerMonth.toEntity(item);
-                tonerMonthRepository.save(newTonerMonth);
             }
+            tonerMonthRepository.save(TonerMonth.toEntity(item));
         }
     }
 }
