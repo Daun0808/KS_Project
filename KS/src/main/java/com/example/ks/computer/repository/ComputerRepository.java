@@ -10,4 +10,6 @@ import java.util.List;
 public interface ComputerRepository extends JpaRepository<Computer, Integer> {
     @EntityGraph(attributePaths = "department")
     List<Computer> findAll();
+
+    List<Computer> findByComputerIpIn(List<String> computerIps);
 }

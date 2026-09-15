@@ -1,5 +1,6 @@
 package com.example.ks.monitor.domain;
 
+import com.example.ks.computer.domain.Computer;
 import com.example.ks.department.domain.Department;
 import com.example.ks.monitor.dto.CreateMonitor;
 import com.example.ks.monitor.dto.UpdateMonitor;
@@ -24,6 +25,10 @@ public class Monitor {
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "computer_id")
+    private Computer computer;
 
     @Column(name = "monitor_place", nullable = false, length = 30)
     private String monitorPlace;
@@ -113,5 +118,22 @@ public class Monitor {
 
     public void delete(String del) {
         this.del = del;
+    }
+
+    public void linkComputer(Computer computer) {
+        this.computer = computer;
+    }
+
+    public void unlinkComputer() {
+        this.computer = null;
+    }
+
+    // [6단계] "폐기" 처리: 실제 행을 지우는 게 아니라 폐기 여부/날짜/사유를 남기고 컴퓨터와의 연결만 끊는다.
+    // del(전체 삭제 플래그)은 건드리지 않으므로 목록에는 계속 보이고, "폐기 상태" 컬럼에만 표시된다.
+    public void dispose(String reason) {
+        this.monitorDel = "Y";
+        this.monitorDelDate = LocalDate.now();
+        this.monitorDelText = reason;
+        this.computer = null;
     }
 }

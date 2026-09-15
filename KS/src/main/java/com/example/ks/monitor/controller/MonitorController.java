@@ -1,7 +1,5 @@
 package com.example.ks.monitor.controller;
 
-import com.example.ks.computer.domain.Computer;
-import com.example.ks.computer.service.ComputerService;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.service.DepartmentService;
 import com.example.ks.monitor.domain.Monitor;
@@ -24,7 +22,6 @@ public class MonitorController {
 
     private final MonitorService monitorService;
     private final DepartmentService departmentService;
-    private final ComputerService computerService;
 
     @GetMapping("/monitor")
     public ModelAndView monitorList() {
@@ -62,13 +59,8 @@ public class MonitorController {
     @GetMapping("/monitor/{monitor_id}")
     public ModelAndView monitorDetail(@PathVariable("monitor_id") int monitorId) {
         ModelAndView mav = new ModelAndView("monitorDetail");
-        List<Computer> computers = computerService.findAll()
-                .stream()
-                .filter(computer -> !"Y".equals(computer.getDel()))
-                .toList();
         Monitor monitor = monitorService.findByMonitorId(monitorId);
         mav.addObject("monitor", monitor);
-        mav.addObject("computers", computers);
         return mav;
     }
 

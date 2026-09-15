@@ -4,16 +4,15 @@ spring:
       enabled: true
   security:
     user:
-      name: ksadmin
-      password: ksh110425!@
+      name: ${ADMIN_USERNAME:ksadmin}
+      password: ${ADMIN_PASSWORD}
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/KS
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: ksh110425!@
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
   jpa:
     open-in-view: false
-    show-sql: true    # Hibernate 가 생성하는 SQL 쿼리를 콘솔에 출력
     properties:
       hibernate:
         format_sql: true    # SQL 쿼리를 보기 쉽게 포맷팅하여 출력합니다.
@@ -38,3 +37,10 @@ server:
       force: true
       enabled: true
       charset: utf-8
+
+logging:
+  file:
+    name: logs/app.log
+  level:
+    org.hibernate.SQL: DEBUG           # SQL 쿼리 (콘솔 + 파일 로그 모두에 남음)
+    org.hibernate.orm.jdbc.bind: TRACE # SQL 바인딩 파라미터 실제 값

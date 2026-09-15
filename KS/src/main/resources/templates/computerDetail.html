@@ -39,6 +39,7 @@
     <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
     <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
     <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+        <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
   </div>
 </div>
 
@@ -75,16 +76,27 @@
       </p>
     </div>
     <div class="mt-4">
-      <h5>사용중인 모니터 목록</h5>
-      <ul class="list-group">
-        <li class="list-group-item" th:each="monitor : ${monitors}"
-            th:if="${monitor.monitorPlace == computer.computerPlace
-            and monitor.department.departmentId == computer.department.departmentId}">
-        <a th:href="@{/monitor/{monitor_id}(monitor_id=${monitor.monitorId})}"
-             th:text="${monitor.getMonitorText()}">
+      <h5>연결된 모니터</h5>
+      <ul class="list-group mb-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center" th:each="monitor : ${monitors}">
+          <a th:href="@{/monitor/{monitor_id}(monitor_id=${monitor.monitorId})}"
+             th:text="${monitor.getMonitorPlace() + ' (' + monitor.getMonitorManufacturer() + ' ' + monitor.getMonitorSize() + ')'}">
           </a>
+          <a th:href="@{/computer/{computer_id}/monitor/unlink/{monitor_id}(computer_id=${computer.computerId}, monitor_id=${monitor.monitorId})}"
+             class="btn btn-sm btn-outline-danger" onclick="return confirm('연결을 해제하시겠습니까?');">연결 해제</a>
         </li>
+        <li class="list-group-item text-muted" th:if="${#lists.isEmpty(monitors)}">연결된 모니터가 없습니다.</li>
       </ul>
+
+      <form th:action="@{/computer/{computer_id}/monitor/link(computer_id=${computer.computerId})}" method="post" class="d-flex gap-2">
+        <select name="monitorId" class="form-select" required>
+          <option value="">연결할 모니터 선택</option>
+          <option th:each="m : ${availableMonitors}" th:value="${m.monitorId}"
+                  th:text="${m.department.departmentName + ' (' + m.department.departmentFloor + '층) - ' + m.monitorPlace}">
+          </option>
+        </select>
+        <button type="submit" class="btn btn-success text-nowrap">모니터 연결</button>
+      </form>
     </div>
   </div>
 
@@ -92,6 +104,7 @@
     <a href="/computer" class="btn btn-secondary">목록으로 돌아가기</a>
     <a th:href="@{/computer/update/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary">수정</a>
     <a th:href="@{/computer/{computer_id}/history(computer_id=${computer_id})}" class="btn btn-outline-info">이력 보기</a>
+    <a th:href="@{/computer/{computer_id}/report/script(computer_id=${computer_id})}" class="btn btn-outline-success">정보 자동수집 스크립트 다운로드</a>
     <a th:href="@{/computer/delete/{computer_id}(computer_id=${computer_id})}" class="btn btn-primary" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
   </div>
 </div>

@@ -1,6 +1,8 @@
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\controller\ComputerController.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\domain\Computer.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\dto\CreateComputer.java
+C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\dto\MonitorReportItem.java
+C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\dto\ReportComputerInfo.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\dto\UpdateComputer.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\repository\ComputerRepository.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\computer\service\ComputerService.java
@@ -18,6 +20,7 @@ C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\depar
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\department\repository\DepartmentRepository.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\department\service\DepartmentService.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\KsApplication.java
+C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\log\controller\LogController.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\Main\main.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\monitor\controller\MonitorController.java
 C:\Users\HP\홈페이지 개발\KS_Project\KS\src\main\java\com\example\ks\monitor\domain\Monitor.java

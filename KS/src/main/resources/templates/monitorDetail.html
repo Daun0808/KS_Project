@@ -39,6 +39,7 @@
     <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
     <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
     <a href="/monitor" class="btn btn-outline-dark navbar-btn">모니터 관리</a>
+        <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
   </div>
 </div>
 
@@ -65,16 +66,13 @@
     </div>
 
     <div class="mt-4">
-      <h5>사용중인 컴퓨터</h5>
-      <ul class="list-group">
-        <li class="list-group-item" th:each="computer : ${computers}"
-            th:if="${monitor.monitorPlace == computer.computerPlace
-            and monitor.department.departmentId == computer.department.departmentId}">
-        <a th:href="@{/computer/{computer_id}(computer_id=${computer.computerId})}"
-             th:text="${ '( ' + computer.department.getDepartmentFloor() + '층 '+ computer.getDepartment().getDepartmentName() + ' )' +computer.getComputerPlace()}">
-          </a>
-        </li>
-      </ul>
+      <h5>연결된 컴퓨터</h5>
+      <p th:if="${monitor.computer != null}">
+        <a th:href="@{/computer/{computer_id}(computer_id=${monitor.computer.computerId})}"
+           th:text="${'(' + monitor.computer.department.departmentFloor + '층 ' + monitor.computer.department.departmentName + ') ' + monitor.computer.computerPlace}">
+        </a>
+      </p>
+      <p class="text-muted" th:if="${monitor.computer == null}">연결된 컴퓨터가 없습니다.</p>
     </div>
   </div>
 

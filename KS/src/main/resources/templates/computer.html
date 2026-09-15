@@ -42,38 +42,34 @@
     <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
     <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
     <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+        <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
   </div>
 </div>
 
 <div class="container mt-5">
   <h2 class="text-center mb-4">컴퓨터 목록</h2>
 
-  <div class="row mb-3">
-    <div class="col-md-2">
-      <input type="text" id="floorSearch" class="form-control" placeholder="층 검색" />
-    </div>
-    <div class="col-md-2">
-      <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색" />
-    </div>
-    <div class="col-md-2">
-      <input type="text" id="placeSearch" class="form-control" placeholder="설치 장소 검색" />
-    </div>
-    <div class="col-md-2">
-      <input type="text" id="ipSearch" class="form-control" placeholder="IP 검색" />
-    </div>
-    <div class="col-md-2">
-      <div class="form-check">
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <input type="text" id="floorSearch" class="form-control" placeholder="층 검색" style="width: 120px" />
+      <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색" style="width: 150px" />
+      <input type="text" id="placeSearch" class="form-control" placeholder="설치 장소 검색" style="width: 150px" />
+      <input type="text" id="ipSearch" class="form-control" placeholder="IP 검색" style="width: 120px" />
+      <div class="form-check d-flex align-items-center ms-2 mb-0">
         <input
                 type="checkbox"
                 id="showActive"
-                class="form-check-input"
+                class="form-check-input me-1"
                 onclick="filterTable()"
                 checked
         />
         <label for="showActive" class="form-check-label">폐기 안된 컴퓨터 보기</label>
       </div>
     </div>
-    <div class="col-md-2 text-end">
+    <div class="d-flex gap-2">
+      <a th:href="@{/computer/report/script}">
+        <button class="btn btn-success">정보 자동수집 스크립트</button>
+      </a>
       <a th:href="@{/computer/create}">
         <button class="btn btn-primary">컴퓨터 등록</button>
       </a>
