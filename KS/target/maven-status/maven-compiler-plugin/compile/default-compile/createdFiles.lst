@@ -12,6 +12,7 @@ com\example\ks\computer\domain\Computer.class
 com\example\ks\printHistory\dto\CreatePrinterHistory.class
 com\example\ks\computer\dto\CreateComputer.class
 com\example\ks\print\dto\CreatePrinter$CreatePrinterBuilder.class
+com\example\ks\computer\controller\ComputerController$MonitorSyncResult.class
 com\example\ks\toner\dto\CreateToner.class
 com\example\ks\computer\repository\ComputerRepository.class
 com\example\ks\department\dto\request\CreateDepartment.class
@@ -22,6 +23,8 @@ com\example\ks\print\dto\CreatePrinter.class
 com\example\ks\computer\dto\CreateComputer$CreateComputerBuilder.class
 com\example\ks\toner\repository\TonerRepository.class
 com\example\ks\toner\dto\UpdateToner.class
+com\example\ks\computer\dto\ReportComputerInfo.class
+com\example\ks\log\controller\LogController.class
 com\example\ks\department\controller\DepartmentController.class
 com\example\ks\config\SecurityConfig.class
 com\example\ks\printHistory\dto\CreatePrinterHistory$CreatePrinterHistoryBuilder.class
@@ -35,6 +38,7 @@ com\example\ks\printHistory\domain\PrinterHistory$PrinterHistoryBuilder.class
 com\example\ks\computerHistory\domain\ComputerHistory.class
 com\example\ks\computerHistory\repository\ComputerHistoryRepository.class
 com\example\ks\department\dto\request\CreateDepartment$CreateDepartmentBuilder.class
+com\example\ks\computer\dto\MonitorReportItem.class
 com\example\ks\toner\domain\Toner.class
 com\example\ks\monitor\domain\Monitor.class
 com\example\ks\tonerMonth\dto\UpdateTonerMonth.class
