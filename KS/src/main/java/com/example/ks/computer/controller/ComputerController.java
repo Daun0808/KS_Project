@@ -107,10 +107,12 @@ public class ComputerController {
                 .build()
                 .toUriString();
 
+        // 백신이 "iex (irm ...)" 형태(원격 스크립트를 받자마자 메모리에서 바로 실행)를
+        // 다운로더/드로퍼 패턴으로 오탐하는 경우가 많아서, 임시 파일로 받은 뒤 파일로 실행하는 방식으로 바꿨다.
         String bat = "@echo off\r\n" +
                 "chcp 65001 >nul\r\n" +
                 "echo 이 컴퓨터의 정보를 수집해서 서버로 전송합니다...\r\n" +
-                "powershell -NoProfile -ExecutionPolicy Bypass -Command \"iex (irm '" + baseUrl + "/computer/" + computerId + "/report/script.ps1')\"\r\n" +
+                "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$tmp = Join-Path $env:TEMP 'ks_collect.ps1'; Invoke-WebRequest -Uri '" + baseUrl + "/computer/" + computerId + "/report/script.ps1' -OutFile $tmp -UseBasicParsing; & $tmp; Remove-Item $tmp -Force\"\r\n" +
                 "echo.\r\n" +
                 "pause\r\n";
 
@@ -289,7 +291,7 @@ public class ComputerController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=UTF-8")
-                .body(script.getBytes(StandardCharsets.UTF_8));
+                .body(withUtf8Bom(script));
     }
 
     // --- [5단계] 서버가 받는 지점 ---
@@ -369,6 +371,18 @@ public class ComputerController {
         return (manufacturer == null ? "" : manufacturer) + "|" + (size == null ? "" : size);
     }
 
+    // .bat가 이제 .ps1을 임시 파일로 저장한 뒤 파일로 실행하는데, BOM 없는 UTF-8 파일은
+    // Windows PowerShell이 시스템 기본 코드페이지(CP949 등)로 잘못 해석해 한글이 깨지고
+    // 문자열이 끊겨 파싱 에러까지 난다. UTF-8 BOM을 붙여서 인코딩을 명시한다.
+    private static byte[] withUtf8Bom(String text) {
+        byte[] bom = { (byte) 0xEF, (byte) 0xBB, (byte) 0xBF };
+        byte[] content = text.getBytes(StandardCharsets.UTF_8);
+        byte[] result = new byte[bom.length + content.length];
+        System.arraycopy(bom, 0, result, 0, bom.length);
+        System.arraycopy(content, 0, result, bom.length, content.length);
+        return result;
+    }
+
     // 정보 자동수집 배치파일 다운로드 (전체용 - 실행하는 PC의 IP로 대상 컴퓨터를 찾음)
     @GetMapping("/computer/report/script")
     public ResponseEntity<byte[]> downloadReportBatByIp(HttpServletRequest request) {
@@ -377,10 +391,12 @@ public class ComputerController {
                 .build()
                 .toUriString();
 
+        // 백신이 "iex (irm ...)" 형태(원격 스크립트를 받자마자 메모리에서 바로 실행)를
+        // 다운로더/드로퍼 패턴으로 오탐하는 경우가 많아서, 임시 파일로 받은 뒤 파일로 실행하는 방식으로 바꿨다.
         String bat = "@echo off\r\n" +
                 "chcp 65001 >nul\r\n" +
                 "echo 이 컴퓨터의 정보를 수집해서 서버로 전송합니다...\r\n" +
-                "powershell -NoProfile -ExecutionPolicy Bypass -Command \"iex (irm '" + baseUrl + "/computer/report/script.ps1')\"\r\n" +
+                "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$tmp = Join-Path $env:TEMP 'ks_collect.ps1'; Invoke-WebRequest -Uri '" + baseUrl + "/computer/report/script.ps1' -OutFile $tmp -UseBasicParsing; & $tmp; Remove-Item $tmp -Force\"\r\n" +
                 "echo.\r\n" +
                 "pause\r\n";
 
@@ -556,7 +572,7 @@ public class ComputerController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "text/plain; charset=UTF-8")
-                .body(script.getBytes(StandardCharsets.UTF_8));
+                .body(withUtf8Bom(script));
     }
 
     // --- [5단계] 서버가 받는 지점 (IP 기반 버전) ---

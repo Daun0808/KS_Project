@@ -197,17 +197,24 @@ public class Computer {
     // [6단계] 자동수집으로 받은 값을 이 컴퓨터 엔티티에 반영하는 규칙.
     // CPU/모델/메모리/OS는 스크립트가 매번 정확하게 다시 읽어오는 값이라 항상 최신값으로 덮어쓴다.
     // (단, 값이 비어있으면 — 수집 실패 등 — 기존 값을 그대로 유지하도록 방어)
+    // 자동수집 경로는 폼 입력과 달리 @Size 검증을 거치지 않고 바로 저장되므로, 수집된 값이
+    // DB 컬럼 길이(예: computer_model 40자)를 넘으면 SQL 저장이 통째로 실패한다. 그래서
+    // 각 컬럼 길이에 맞춰 여기서 미리 잘라준다.
     public void applyReport(ReportComputerInfo report) {
-        if (report.cpu() != null && !report.cpu().isBlank()) this.computerCpu = report.cpu();
-        if (report.model() != null && !report.model().isBlank()) this.computerModel = report.model();
-        if (report.memory() != null && !report.memory().isBlank()) this.computerMemory = report.memory();
-        if (report.os() != null && !report.os().isBlank()) this.computerOs = report.os();
-        if (report.hwp() != null && !report.hwp().isBlank()) this.computerHwp = report.hwp();
-        if (report.office() != null && !report.office().isBlank()) this.computerOffice = report.office();
+        if (report.cpu() != null && !report.cpu().isBlank()) this.computerCpu = truncate(report.cpu(), 50);
+        if (report.model() != null && !report.model().isBlank()) this.computerModel = truncate(report.model(), 40);
+        if (report.memory() != null && !report.memory().isBlank()) this.computerMemory = truncate(report.memory(), 20);
+        if (report.os() != null && !report.os().isBlank()) this.computerOs = truncate(report.os(), 60);
+        if (report.hwp() != null && !report.hwp().isBlank()) this.computerHwp = truncate(report.hwp(), 30);
+        if (report.office() != null && !report.office().isBlank()) this.computerOffice = truncate(report.office(), 30);
         // 생산일은 BIOS 릴리즈 날짜 기준 "근사치"일 뿐이라, 누군가 이미 정확한 값을 입력해뒀다면
         // 그걸 덮어쓰지 않도록 기존 값이 비어있을 때만 채운다.
         if (this.computerProductDate == null && report.productDate() != null) {
             this.computerProductDate = report.productDate();
         }
+    }
+
+    private static String truncate(String value, int maxLength) {
+        return value.length() > maxLength ? value.substring(0, maxLength) : value;
     }
 }
