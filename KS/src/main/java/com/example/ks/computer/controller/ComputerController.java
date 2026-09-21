@@ -23,6 +23,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping
@@ -166,6 +168,55 @@ public class ComputerController {
                     if ($biosDate) { $productDate = $biosDate.ToString('yyyy-MM-dd') }
                 } catch {}
 
+                # 엑셀/파워포인트(오피스)/한글: 시작 메뉴(전체 사용자 + 현재 사용자) 밑을 한 번만 재귀적으로
+                # 훑어서, 하위 폴더 이름(예: "Microsoft Office", "한컴오피스 NEO")에 상관없이 바로가기
+                # 파일명만으로 판단한다. "업데이트/도움말/제거" 같은 부속 바로가기는 후보에서 제외한다.
+                $startMenuRoots = @(
+                    (Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs'),
+                    (Join-Path $env:AppData 'Microsoft\\Windows\\Start Menu\\Programs')
+                )
+                $excludePatterns = '업데이트', 'Update', '패치', 'Patch', '정품인증', '라이선스', 'License', 'Uninstall', '제거', '도움말', 'Help', '고객지원'
+
+                $shortcuts = @()
+                foreach ($root in $startMenuRoots) {
+                    if (Test-Path $root) {
+                        $shortcuts += Get-ChildItem -Path $root -Recurse -File -ErrorAction SilentlyContinue |
+                            Where-Object { $_.Extension -in '.lnk', '.exe' } |
+                            Select-Object -ExpandProperty BaseName
+                    }
+                }
+                $shortcuts = @($shortcuts | Where-Object {
+                    $name = $_
+                    -not ($excludePatterns | Where-Object { $name -match $_ })
+                })
+
+                $excelFile = $shortcuts | Where-Object { $_ -match 'Excel' } | Select-Object -First 1
+                $otherOfficeFile = $shortcuts | Where-Object { $_ -match 'PowerPoint|Word' } | Select-Object -First 1
+                $hwpFile = $shortcuts | Where-Object { $_ -match '한글' } | Select-Object -First 1
+                if (-not $hwpFile) {
+                    $hwpFile = $shortcuts | Where-Object { $_ -match 'Hancom|HNC|한컴' } | Select-Object -First 1
+                }
+
+                # 엑셀 말고 파워포인트/워드 바로가기도 있으면 "오피스", 엑셀만 있으면 "엑셀"로 표기
+                # (파일명에 연도가 있으면 붙여준다).
+                $office = $null
+                if ($otherOfficeFile -or $excelFile) {
+                    $label = if ($otherOfficeFile) { '오피스' } else { '엑셀' }
+                    $yearSource = if ($otherOfficeFile) { $otherOfficeFile } else { $excelFile }
+                    if ($yearSource -match '(19|20)\\d{2}') {
+                        $office = "$label $($Matches[0])"
+                    } else {
+                        $office = $label
+                    }
+                }
+
+                # 한글: 바로가기 파일명을 그대로 사용(예: "한글 2010.lnk" -> "한글 2010").
+                $hwp = $null
+                if ($hwpFile) {
+                    $hwp = $hwpFile
+                    if ($hwp.Length -gt 30) { $hwp = $hwp.Substring(0, 30) }
+                }
+
                 # 모니터 정보: 듀얼/트리플 모니터도 전부 잡아야 하므로 -First 1을 쓰지 않고 전체를 순회한다.
                 # WmiMonitorID(제조사, EDID상 제조 연/주차)와 WmiMonitorBasicDisplayParams(화면 물리 크기)는
                 # 서로 다른 CIM 클래스지만, 같은 물리 모니터라면 InstanceName 값이 동일하다.
@@ -209,7 +260,7 @@ public class ComputerController {
                 } catch {}
 
                 # 화면에 수집 결과를 미리 보여줘서, 전송 전에 뭐가 잡혔는지 바로 확인할 수 있게 한다.
-                Write-Host "수집된 정보 -> CPU: $cpu / 모델: $model / 메모리: $memoryGb GB / OS: $os / 생산일(근사): $productDate / 모니터 $($monitors.Count)대: $($monitors | ConvertTo-Json -Compress)"
+                Write-Host "수집된 정보 -> CPU: $cpu / 모델: $model / 메모리: $memoryGb GB / OS: $os / 한글: $hwp / 오피스: $office / 생산일(근사): $productDate / 모니터 $($monitors.Count)대: $($monitors | ConvertTo-Json -Compress)"
 
                 # --- [4단계] 수집한 값들을 하나의 JSON으로 묶어서 서버로 전송 ---
                 # monitors가 "배열 안에 객체가 여러 개" 들어있는 중첩 구조라, ConvertTo-Json의 기본 깊이(2)로는
@@ -219,6 +270,8 @@ public class ComputerController {
                     model = $model
                     memory = "$memoryGb GB"
                     os = $os
+                    hwp = $hwp
+                    office = $office
                     productDate = $productDate
                     monitors = $monitors
                 } | ConvertTo-Json -Depth 5
@@ -256,10 +309,13 @@ public class ComputerController {
         return ResponseEntity.ok(result.toMessage());
     }
 
-    // 이 컴퓨터에 연결돼있던 모니터는 전부 폐기 처리(자산 기록은 남기고 연결만 해제)하고,
-    // 이번에 감지된 모니터를 전부 새 자산으로 등록해서 연결한다.
-    private record MonitorSyncResult(int disposed, int registered) {
+    // 연결된 모니터 구성과 감지된 모니터 구성이 완전히 같으면 손대지 않고, 다르면
+    // 기존 모니터는 전부 폐기 처리(자산 기록은 남기고 연결만 해제)하고 감지된 모니터를 전부 새로 등록해서 연결한다.
+    private record MonitorSyncResult(int disposed, int registered, boolean unchanged) {
         String toMessage() {
+            if (unchanged) {
+                return "모니터 구성 변경 없음 (그대로 유지)";
+            }
             return "기존 모니터 폐기 " + disposed + "건, 신규 등록/연결 " + registered + "건";
         }
     }
@@ -270,20 +326,47 @@ public class ComputerController {
                 .filter(monitor -> !"Y".equals(monitor.getDel()))
                 .toList();
 
-        // 2) 그 모니터들을 전부 폐기 처리한다. 실제 DELETE가 아니라 monitor_del=Y로 표시하고
-        //    연결(computer_id)만 끊는 것이라, 자산 이력 자체는 남는다.
+        List<MonitorReportItem> reportedMonitors = report.monitors() == null ? List.of() : report.monitors();
+
+        // 2) 제조사+사이즈 기준으로 구성이 완전히 같으면(순서는 상관없음) 아무것도 안 건드리고 끝낸다.
+        //    스크립트를 반복 실행해도 매번 폐기+재등록이 일어나서 쓸데없이 자산이 쌓이는 걸 막기 위함.
+        if (isSameMonitorSet(linked, reportedMonitors)) {
+            return new MonitorSyncResult(0, 0, true);
+        }
+
+        // 3) 구성이 다르면, 기존에 연결된 모니터를 전부 폐기 처리한다. 실제 DELETE가 아니라
+        //    monitor_del=Y로 표시하고 연결(computer_id)만 끊는 것이라, 자산 이력 자체는 남는다.
         for (Monitor monitor : linked) {
             monitorService.disposeAndUnlink(monitor.getMonitorId(), "정보 자동수집으로 대체됨");
         }
 
-        // 3) 이번에 실제로 감지된 모니터 개수만큼 새 모니터 자산을 등록하고 이 컴퓨터에 바로 연결한다.
-        //    몇 대가 연결돼 있었는지와 무관하게, 매번 "지금 실제로 꽂혀있는 구성"으로 깔끔하게 다시 만든다.
-        List<MonitorReportItem> reportedMonitors = report.monitors() == null ? List.of() : report.monitors();
+        // 4) 이번에 실제로 감지된 모니터 개수만큼 새 모니터 자산을 등록하고 이 컴퓨터에 바로 연결한다.
         for (MonitorReportItem item : reportedMonitors) {
             monitorService.registerAndLink(computer, item.manufacturer(), item.size(), item.manufactureDate());
         }
 
-        return new MonitorSyncResult(linked.size(), reportedMonitors.size());
+        return new MonitorSyncResult(linked.size(), reportedMonitors.size(), false);
+    }
+
+    // 연결된 모니터들과 감지된 모니터들을, 제조사+사이즈 조합의 "개수"로 비교한다.
+    // (감지 순서가 매번 같으리란 보장이 없어서 순서 없이 다중집합으로 비교)
+    private boolean isSameMonitorSet(List<Monitor> linked, List<MonitorReportItem> reported) {
+        if (linked.size() != reported.size()) {
+            return false;
+        }
+        Map<String, Long> linkedCounts = linked.stream()
+                .collect(Collectors.groupingBy(
+                        m -> monitorKey(m.getMonitorManufacturer(), m.getMonitorSize()),
+                        Collectors.counting()));
+        Map<String, Long> reportedCounts = reported.stream()
+                .collect(Collectors.groupingBy(
+                        m -> monitorKey(m.manufacturer(), m.size()),
+                        Collectors.counting()));
+        return linkedCounts.equals(reportedCounts);
+    }
+
+    private String monitorKey(String manufacturer, String size) {
+        return (manufacturer == null ? "" : manufacturer) + "|" + (size == null ? "" : size);
     }
 
     // 정보 자동수집 배치파일 다운로드 (전체용 - 실행하는 PC의 IP로 대상 컴퓨터를 찾음)
@@ -360,6 +443,55 @@ public class ComputerController {
                     if ($biosDate) { $productDate = $biosDate.ToString('yyyy-MM-dd') }
                 } catch {}
 
+                # 엑셀/파워포인트(오피스)/한글: 시작 메뉴(전체 사용자 + 현재 사용자) 밑을 한 번만 재귀적으로
+                # 훑어서, 하위 폴더 이름(예: "Microsoft Office", "한컴오피스 NEO")에 상관없이 바로가기
+                # 파일명만으로 판단한다. "업데이트/도움말/제거" 같은 부속 바로가기는 후보에서 제외한다.
+                $startMenuRoots = @(
+                    (Join-Path $env:ProgramData 'Microsoft\\Windows\\Start Menu\\Programs'),
+                    (Join-Path $env:AppData 'Microsoft\\Windows\\Start Menu\\Programs')
+                )
+                $excludePatterns = '업데이트', 'Update', '패치', 'Patch', '정품인증', '라이선스', 'License', 'Uninstall', '제거', '도움말', 'Help', '고객지원'
+
+                $shortcuts = @()
+                foreach ($root in $startMenuRoots) {
+                    if (Test-Path $root) {
+                        $shortcuts += Get-ChildItem -Path $root -Recurse -File -ErrorAction SilentlyContinue |
+                            Where-Object { $_.Extension -in '.lnk', '.exe' } |
+                            Select-Object -ExpandProperty BaseName
+                    }
+                }
+                $shortcuts = @($shortcuts | Where-Object {
+                    $name = $_
+                    -not ($excludePatterns | Where-Object { $name -match $_ })
+                })
+
+                $excelFile = $shortcuts | Where-Object { $_ -match 'Excel' } | Select-Object -First 1
+                $otherOfficeFile = $shortcuts | Where-Object { $_ -match 'PowerPoint|Word' } | Select-Object -First 1
+                $hwpFile = $shortcuts | Where-Object { $_ -match '한글' } | Select-Object -First 1
+                if (-not $hwpFile) {
+                    $hwpFile = $shortcuts | Where-Object { $_ -match 'Hancom|HNC|한컴' } | Select-Object -First 1
+                }
+
+                # 엑셀 말고 파워포인트/워드 바로가기도 있으면 "오피스", 엑셀만 있으면 "엑셀"로 표기
+                # (파일명에 연도가 있으면 붙여준다).
+                $office = $null
+                if ($otherOfficeFile -or $excelFile) {
+                    $label = if ($otherOfficeFile) { '오피스' } else { '엑셀' }
+                    $yearSource = if ($otherOfficeFile) { $otherOfficeFile } else { $excelFile }
+                    if ($yearSource -match '(19|20)\\d{2}') {
+                        $office = "$label $($Matches[0])"
+                    } else {
+                        $office = $label
+                    }
+                }
+
+                # 한글: 바로가기 파일명을 그대로 사용(예: "한글 2010.lnk" -> "한글 2010").
+                $hwp = $null
+                if ($hwpFile) {
+                    $hwp = $hwpFile
+                    if ($hwp.Length -gt 30) { $hwp = $hwp.Substring(0, 30) }
+                }
+
                 # 모니터 전체(듀얼/트리플 포함) 수집: WmiMonitorID + WmiMonitorBasicDisplayParams를
                 # InstanceName으로 짝지어서 모니터별 제조사/제조년월/화면크기를 뽑는다.
                 $monitors = @()
@@ -397,7 +529,7 @@ public class ComputerController {
 
                 # 전송 전에 뭐가 잡혔는지 화면에서 바로 확인
                 Write-Host "이 PC의 IP: $ip"
-                Write-Host "수집된 정보 -> CPU: $cpu / 모델: $model / 메모리: $memoryGb GB / OS: $os / 생산일(근사): $productDate / 모니터 $($monitors.Count)대: $($monitors | ConvertTo-Json -Compress)"
+                Write-Host "수집된 정보 -> CPU: $cpu / 모델: $model / 메모리: $memoryGb GB / OS: $os / 한글: $hwp / 오피스: $office / 생산일(근사): $productDate / 모니터 $($monitors.Count)대: $($monitors | ConvertTo-Json -Compress)"
 
                 # --- [4단계] JSON으로 묶어서 전송. IP도 함께 실어보내서, 서버가 이 값으로 어떤 컴퓨터인지 찾는다. ---
                 $body = @{
@@ -406,6 +538,8 @@ public class ComputerController {
                     model = $model
                     memory = "$memoryGb GB"
                     os = $os
+                    hwp = $hwp
+                    office = $office
                     productDate = $productDate
                     monitors = $monitors
                 } | ConvertTo-Json -Depth 5

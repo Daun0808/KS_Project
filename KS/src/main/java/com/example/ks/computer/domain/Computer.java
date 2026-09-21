@@ -202,6 +202,8 @@ public class Computer {
         if (report.model() != null && !report.model().isBlank()) this.computerModel = report.model();
         if (report.memory() != null && !report.memory().isBlank()) this.computerMemory = report.memory();
         if (report.os() != null && !report.os().isBlank()) this.computerOs = report.os();
+        if (report.hwp() != null && !report.hwp().isBlank()) this.computerHwp = report.hwp();
+        if (report.office() != null && !report.office().isBlank()) this.computerOffice = report.office();
         // 생산일은 BIOS 릴리즈 날짜 기준 "근사치"일 뿐이라, 누군가 이미 정확한 값을 입력해뒀다면
         // 그걸 덮어쓰지 않도록 기존 값이 비어있을 때만 채운다.
         if (this.computerProductDate == null && report.productDate() != null) {

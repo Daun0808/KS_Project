@@ -9,6 +9,8 @@ public record ReportComputerInfo(
         String model,
         String memory,
         String os,
+        String hwp,
+        String office,
         LocalDate productDate,
         List<MonitorReportItem> monitors
 ) {}

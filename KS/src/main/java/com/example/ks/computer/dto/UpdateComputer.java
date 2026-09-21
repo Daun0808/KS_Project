@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public record UpdateComputer(
         @NotBlank @Size(max = 30) String computerPlace,
         LocalDate computerPlaceDate,
-        @Size(max = 30) String computerOs,
+        @Size(max = 60) String computerOs,
         @Size(max = 30) String computerIp,
         @Size(max = 30) String computerHwp,
         @Size(max = 30) String computerOffice,
