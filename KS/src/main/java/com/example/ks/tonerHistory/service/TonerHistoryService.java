@@ -6,6 +6,7 @@ import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerHistory.domain.TonerHistory;
 import com.example.ks.tonerHistory.dto.CreateTonerHistory;
 import com.example.ks.tonerHistory.dto.DateTonerHistory;
+import com.example.ks.tonerHistory.dto.DepartmentTonerUsage;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
 import com.example.ks.tonerHistory.repository.TonerHistoryRepository;
 import com.example.ks.tonerMonth.domain.TonerMonth;
@@ -16,7 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -148,6 +152,21 @@ public class TonerHistoryService {
                         history.getToner().getTonerName(),
                         history.getHistoryDelivery()
                 ))
+                .toList();
+    }
+
+    // 부서별 토너 사용량 도넛 차트용: 기간 내 출고 수량을 부서별로 합산해서 많이 쓴 순으로 반환
+    @Transactional(readOnly = true)
+    public List<DepartmentTonerUsage> getDepartmentUsageSummary(LocalDate start, LocalDate end) {
+        return tonerHistoryRepository.findAll().stream()
+                .filter(history -> !"Y".equals(history.getDel()))
+                .filter(history -> history.getHistoryDelivery() != null && history.getHistoryDelivery() > 0)
+                .filter(history -> !history.getHistoryDate().isBefore(start) && !history.getHistoryDate().isAfter(end))
+                .collect(Collectors.groupingBy(TonerHistory::getDepartmentName,
+                        Collectors.summingInt(TonerHistory::getHistoryDelivery)))
+                .entrySet().stream()
+                .map(entry -> new DepartmentTonerUsage(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparingInt(DepartmentTonerUsage::totalDelivery).reversed())
                 .toList();
     }
 

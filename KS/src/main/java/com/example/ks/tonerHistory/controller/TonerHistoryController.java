@@ -6,10 +6,12 @@ import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerHistory.domain.TonerHistory;
 import com.example.ks.tonerHistory.dto.CreateTonerHistory;
 import com.example.ks.tonerHistory.dto.DateTonerHistory;
+import com.example.ks.tonerHistory.dto.DepartmentTonerUsage;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
 import com.example.ks.tonerHistory.service.TonerHistoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -178,5 +180,33 @@ public class TonerHistoryController {
         ModelAndView modelAndView = new ModelAndView("tonerHistoryAll");
         modelAndView.addObject("tonerHistoryList", tonerHistoryList);
         return modelAndView;
+    }
+
+    // 부서별 토너 사용량 도넛 차트 페이지. 기간을 안 주면 이번 달(1일 ~ 오늘)로 기본값을 잡는다.
+    @GetMapping("/history/summary")
+    public ModelAndView tonerUsageSummary(
+            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        LocalDate today = LocalDate.now();
+        LocalDate rangeStart = start != null ? start : today.withDayOfMonth(1);
+        LocalDate rangeEnd = end != null ? end : today;
+
+        ModelAndView modelAndView = new ModelAndView("tonerUsageSummary");
+        modelAndView.addObject("summary", tonerHistoryService.getDepartmentUsageSummary(rangeStart, rangeEnd));
+        modelAndView.addObject("start", rangeStart);
+        modelAndView.addObject("end", rangeEnd);
+        return modelAndView;
+    }
+
+    // 위 페이지가 주기적으로 다시 불러가는 JSON API (자동 갱신용)
+    @GetMapping("/history/summary/data")
+    @ResponseBody
+    public List<DepartmentTonerUsage> tonerUsageSummaryData(
+            @RequestParam(value = "start", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam(value = "end", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        LocalDate today = LocalDate.now();
+        LocalDate rangeStart = start != null ? start : today.withDayOfMonth(1);
+        LocalDate rangeEnd = end != null ? end : today;
+        return tonerHistoryService.getDepartmentUsageSummary(rangeStart, rangeEnd);
     }
 }
