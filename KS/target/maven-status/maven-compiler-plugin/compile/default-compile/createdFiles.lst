@@ -35,6 +35,7 @@ com\example\ks\tonerMonth\repository\TonerMonthRepository.class
 com\example\ks\print\domain\Printer$PrinterBuilder.class
 com\example\ks\computer\service\ComputerService.class
 com\example\ks\printHistory\domain\PrinterHistory$PrinterHistoryBuilder.class
+com\example\ks\tonerHistory\dto\DepartmentTonerUsage.class
 com\example\ks\computerHistory\domain\ComputerHistory.class
 com\example\ks\computerHistory\repository\ComputerHistoryRepository.class
 com\example\ks\department\dto\request\CreateDepartment$CreateDepartmentBuilder.class
