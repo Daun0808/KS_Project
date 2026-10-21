@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>의료장비 정보 수정</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #f8f9fa;
+      padding: 5px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-btn {
+      font-size: 1rem;
+      margin-right: 15px;
+    }
+
+    body {
+      padding-top: 60px;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: #495057;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar-fixed">
+  <div class="container d-flex justify-content-start">
+    <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+    <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+    <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+    <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+    <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+    <a href="/toner/history/summary" class="btn btn-outline-warning navbar-btn">부서별 사용량 통계</a>
+    <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+    <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+    <a href="/equipment" class="btn btn-outline-dark navbar-btn">의료장비 관리</a>
+    <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">의료장비 정보 수정</h2>
+
+  <form th:action="@{/equipment/update}" th:object="${equipment}" method="post">
+    <input type="hidden" th:field="*{equipmentId}"/>
+
+    <div class="section-title">자산 기본 정보</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">자산관리번호</label>
+        <input type="text" class="form-control" th:field="*{assetManagementNumber}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">장비구분</label>
+        <input type="text" class="form-control" th:field="*{equipmentType}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">자산코드분류</label>
+        <input type="text" class="form-control" th:field="*{assetCodeClassification}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">장비번호</label>
+        <input type="text" class="form-control" th:field="*{equipmentNumber}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">품목분류명</label>
+        <input type="text" class="form-control" th:field="*{itemClassificationName}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">품목세분류명</label>
+        <input type="text" class="form-control" th:field="*{itemSubClassificationName}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">급여적용일자</label>
+        <input type="date" class="form-control" name="insuranceApplicationDate" th:value="${equipment.insuranceApplicationDate}">
+      </div>
+    </div>
+
+    <div class="section-title">식약처정보</div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">제품명</label>
+        <input type="text" class="form-control" th:field="*{mfdsProductName}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">품목명 및 형명[모델명]</label>
+        <input type="text" class="form-control" th:field="*{itemNameModel}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">허가(신고)번호</label>
+        <input type="text" class="form-control" th:field="*{permitReportNumber}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">분류번호</label>
+        <input type="text" class="form-control" th:field="*{mfdsClassificationNumber}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">등급</label>
+        <input type="text" class="form-control" th:field="*{mfdsGrade}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">업소허가번호</label>
+        <input type="text" class="form-control" th:field="*{businessPermitNumber}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">구분</label>
+        <input type="text" class="form-control" th:field="*{division}">
+      </div>
+    </div>
+
+    <div class="section-title">장비제조사항</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">제조국가</label>
+        <input type="text" class="form-control" th:field="*{manufacturingCountry}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">제조년월</label>
+        <input type="text" class="form-control" th:field="*{manufactureYearMonth}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">제조번호</label>
+        <input type="text" class="form-control" th:field="*{manufacturingNumber}">
+      </div>
+    </div>
+
+    <div class="section-title">구입세부사항</div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">도입형태</label>
+        <input type="text" class="form-control" th:field="*{acquisitionType}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">구입처</label>
+        <input type="text" class="form-control" th:field="*{purchaseSource}">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">금액(원)</label>
+        <input type="text" class="form-control" th:field="*{purchaseAmount}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">신규/중고 구분</label>
+        <input type="text" class="form-control" th:field="*{newUsedDivision}">
+      </div>
+    </div>
+
+    <div class="section-title">기타</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">표준코드</label>
+        <input type="text" class="form-control" th:field="*{standardCode}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">장비구매가</label>
+        <input type="text" class="form-control" th:field="*{equipmentPurchasePrice}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">고/저위험</label>
+        <select class="form-select" th:field="*{riskLevel}">
+          <option value=""></option>
+          <option value="고위험">고위험</option>
+          <option value="저위험">저위험</option>
+        </select>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">정기점검 일시</label>
+        <input type="date" class="form-control" name="regularInspectionDate" th:value="${equipment.regularInspectionDate}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">유지보수 기간</label>
+        <input type="text" class="form-control" th:field="*{maintenancePeriod}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">점검업체</label>
+        <input type="text" class="form-control" th:field="*{inspectionCompany}">
+      </div>
+    </div>
+
+    <div class="section-title">기본 정보</div>
+    <div class="mb-3">
+      <label class="form-label">설치 장소</label>
+      <input type="text" class="form-control" th:field="*{equipmentPlace}" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">설치일</label>
+      <input type="date" class="form-control" name="equipmentPlaceDate" th:value="${equipment.equipmentPlaceDate}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">장비명</label>
+      <input type="text" class="form-control" th:field="*{equipmentName}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">제조사</label>
+      <input type="text" class="form-control" th:field="*{equipmentMaker}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">용도</label>
+      <input type="text" class="form-control" th:field="*{equipmentPurpose}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">생산년도</label>
+      <input type="date" class="form-control" name="equipmentProductDate" th:value="${equipment.equipmentProductDate}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">구입일</label>
+      <input type="date" class="form-control" name="equipmentBuyDate" th:value="${equipment.equipmentBuyDate}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">시리얼 번호</label>
+      <input type="text" class="form-control" th:field="*{equipmentSerialNumber}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">원내 고유번호</label>
+      <input type="text" class="form-control" th:field="*{equipmentUniqueNumber}">
+    </div>
+
+    <div class="section-title">장비 네트워크 정보 (로컬 AE)</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">장비 IP</label>
+        <input type="text" class="form-control" th:field="*{equipmentIp}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">장비 Port</label>
+        <input type="text" class="form-control" th:field="*{equipmentPort}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">장비 AETitle</label>
+        <input type="text" class="form-control" th:field="*{equipmentAeTitle}">
+      </div>
+    </div>
+
+    <div class="section-title">DICOM(PACS) 연동 정보</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">DICOM IP</label>
+        <input type="text" class="form-control" th:field="*{dicomIp}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">DICOM Port</label>
+        <input type="text" class="form-control" th:field="*{dicomPort}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">DICOM AETitle</label>
+        <input type="text" class="form-control" th:field="*{dicomAeTitle}">
+      </div>
+    </div>
+
+    <div class="section-title">Worklist(RIS/HIS) 연동 정보</div>
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <label class="form-label">Worklist IP</label>
+        <input type="text" class="form-control" th:field="*{worklistIp}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Worklist Port</label>
+        <input type="text" class="form-control" th:field="*{worklistPort}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Worklist AETitle</label>
+        <input type="text" class="form-control" th:field="*{worklistAeTitle}">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">비고</label>
+      <textarea class="form-control" th:field="*{equipmentText}"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">폐기 여부</label>
+      <select class="form-select" th:field="*{equipmentDel}">
+        <option value="Y">폐기</option>
+        <option value="N">사용중</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">폐기 일자</label>
+      <input type="date" class="form-control" name="equipmentDelDate" th:value="${equipment.equipmentDelDate}">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">폐기 사유</label>
+      <textarea class="form-control" th:field="*{equipmentDelText}"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">플래그 값</label>
+      <select class="form-select" th:field="*{del}">
+        <option value="N">N</option>
+        <option value="Y">Y</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">소속 부서</label>
+      <select class="form-select" name="departmentId">
+        <option th:each="dept : ${departments}"
+                th:value="${dept.departmentId}"
+                th:text="${dept.departmentName + ' (' + dept.departmentFloor + '층)'}"
+                th:selected="${dept.departmentId == equipment.department.getDepartmentId()}">
+        </option>
+      </select>
+    </div>
+
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary">저장</button>
+      <a href="/equipment" class="btn btn-secondary">취소</a>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

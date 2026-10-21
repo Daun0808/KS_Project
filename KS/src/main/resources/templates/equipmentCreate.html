@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>의료장비 추가</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+        <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+        <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+        <a href="/toner/history/summary" class="btn btn-outline-warning navbar-btn">부서별 사용량 통계</a>
+        <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+        <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+        <a href="/equipment" class="btn btn-outline-dark navbar-btn">의료장비 관리</a>
+        <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">의료장비 추가</h2>
+
+    <form th:action="@{/equipment/create}" method="post">
+        <div class="section-title">자산 기본 정보</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="assetManagementNumber" class="form-label">자산관리번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="assetManagementNumber" name="assetManagementNumber" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="equipmentType" class="form-label">장비구분 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentType" name="equipmentType" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-4">
+                <label for="assetCodeClassification" class="form-label">자산코드분류 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="assetCodeClassification" name="assetCodeClassification" class="form-control" maxlength="30">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="equipmentNumber" class="form-label">장비번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentNumber" name="equipmentNumber" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-4">
+                <label for="itemClassificationName" class="form-label">품목분류명 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="itemClassificationName" name="itemClassificationName" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="itemSubClassificationName" class="form-label">품목세분류명 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="itemSubClassificationName" name="itemSubClassificationName" class="form-control" maxlength="30">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="insuranceApplicationDate" class="form-label">급여적용일자 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="date" id="insuranceApplicationDate" name="insuranceApplicationDate" class="form-control">
+            </div>
+        </div>
+
+        <div class="section-title">식약처정보</div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="mfdsProductName" class="form-label">제품명 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="mfdsProductName" name="mfdsProductName" class="form-control" maxlength="50">
+            </div>
+            <div class="col-md-6">
+                <label for="itemNameModel" class="form-label">품목명 및 형명[모델명] <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="itemNameModel" name="itemNameModel" class="form-control" maxlength="50">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="permitReportNumber" class="form-label">허가(신고)번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="permitReportNumber" name="permitReportNumber" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="mfdsClassificationNumber" class="form-label">분류번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="mfdsClassificationNumber" name="mfdsClassificationNumber" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="mfdsGrade" class="form-label">등급 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="mfdsGrade" name="mfdsGrade" class="form-control" maxlength="10">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="businessPermitNumber" class="form-label">업소허가번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="businessPermitNumber" name="businessPermitNumber" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-6">
+                <label for="division" class="form-label">구분 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="division" name="division" class="form-control" maxlength="20">
+            </div>
+        </div>
+
+        <div class="section-title">장비제조사항</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="manufacturingCountry" class="form-label">제조국가 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="manufacturingCountry" name="manufacturingCountry" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-4">
+                <label for="manufactureYearMonth" class="form-label">제조년월 <span class="text-muted" style="font-size: 0.9em;">(선택, YYYY-MM)</span></label>
+                <input type="text" id="manufactureYearMonth" name="manufactureYearMonth" class="form-control" maxlength="10">
+            </div>
+            <div class="col-md-4">
+                <label for="manufacturingNumber" class="form-label">제조번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="manufacturingNumber" name="manufacturingNumber" class="form-control" maxlength="30">
+            </div>
+        </div>
+
+        <div class="section-title">구입세부사항</div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="acquisitionType" class="form-label">도입형태 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="acquisitionType" name="acquisitionType" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-6">
+                <label for="purchaseSource" class="form-label">구입처 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="purchaseSource" name="purchaseSource" class="form-control" maxlength="30">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="purchaseAmount" class="form-label">금액(원) <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="purchaseAmount" name="purchaseAmount" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-6">
+                <label for="newUsedDivision" class="form-label">신규/중고 구분 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="newUsedDivision" name="newUsedDivision" class="form-control" maxlength="10">
+            </div>
+        </div>
+
+        <div class="section-title">기타</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="standardCode" class="form-label">표준코드 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="standardCode" name="standardCode" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="equipmentPurchasePrice" class="form-label">장비구매가 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentPurchasePrice" name="equipmentPurchasePrice" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-4">
+                <label for="riskLevel" class="form-label">고/저위험 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <select id="riskLevel" name="riskLevel" class="form-select">
+                    <option value=""></option>
+                    <option value="고위험">고위험</option>
+                    <option value="저위험">저위험</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="regularInspectionDate" class="form-label">정기점검 일시 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="date" id="regularInspectionDate" name="regularInspectionDate" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="maintenancePeriod" class="form-label">유지보수 기간 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="maintenancePeriod" name="maintenancePeriod" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-4">
+                <label for="inspectionCompany" class="form-label">점검업체 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="inspectionCompany" name="inspectionCompany" class="form-control" maxlength="30">
+            </div>
+        </div>
+
+        <div class="section-title">기본 정보</div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="departmentId" class="form-label">부서 선택</label>
+                <select id="departmentId" name="departmentId" class="form-select" required>
+                    <option value="">부서를 선택하세요</option>
+                    <option th:each="dept : ${departments}"
+                            th:value="${dept.getDepartmentId()}"
+                            th:text="${dept.getDepartmentName() + ' (' + dept.getDepartmentFloor() + '층)'}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="equipmentPlace" class="form-label">설치 장소</label>
+                <input type="text" id="equipmentPlace" name="equipmentPlace" class="form-control" maxlength="20" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="equipmentPlaceDate" class="form-label">설치일</label>
+                <input type="date" id="equipmentPlaceDate" name="equipmentPlaceDate" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+                <label for="equipmentName" class="form-label">장비명 (CT, MRI, 초음파 등)</label>
+                <input type="text" id="equipmentName" name="equipmentName" class="form-control" maxlength="20" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="equipmentMaker" class="form-label">제조사 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentMaker" name="equipmentMaker" class="form-control" maxlength="20">
+            </div>
+            <div class="col-md-6">
+                <label for="equipmentPurpose" class="form-label">용도 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentPurpose" name="equipmentPurpose" class="form-control" maxlength="30">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="equipmentProductDate" class="form-label">생산년도 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="date" id="equipmentProductDate" name="equipmentProductDate" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label for="equipmentBuyDate" class="form-label">구입일 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="date" id="equipmentBuyDate" name="equipmentBuyDate" class="form-control">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="equipmentSerialNumber" class="form-label">시리얼 번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentSerialNumber" name="equipmentSerialNumber" class="form-control" maxlength="30">
+            </div>
+            <div class="col-md-6">
+                <label for="equipmentUniqueNumber" class="form-label">원내 고유번호 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentUniqueNumber" name="equipmentUniqueNumber" class="form-control" maxlength="20">
+            </div>
+        </div>
+
+        <div class="section-title">장비 네트워크 정보 (로컬 AE)</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="equipmentIp" class="form-label">장비 IP</label>
+                <input type="text" id="equipmentIp" name="equipmentIp" class="form-control" maxlength="15">
+            </div>
+            <div class="col-md-4">
+                <label for="equipmentPort" class="form-label">장비 Port</label>
+                <input type="text" id="equipmentPort" name="equipmentPort" class="form-control" maxlength="10">
+            </div>
+            <div class="col-md-4">
+                <label for="equipmentAeTitle" class="form-label">장비 AETitle</label>
+                <input type="text" id="equipmentAeTitle" name="equipmentAeTitle" class="form-control" maxlength="20">
+            </div>
+        </div>
+
+        <div class="section-title">DICOM(PACS) 연동 정보</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="dicomIp" class="form-label">DICOM IP</label>
+                <input type="text" id="dicomIp" name="dicomIp" class="form-control" maxlength="15">
+            </div>
+            <div class="col-md-4">
+                <label for="dicomPort" class="form-label">DICOM Port</label>
+                <input type="text" id="dicomPort" name="dicomPort" class="form-control" maxlength="10">
+            </div>
+            <div class="col-md-4">
+                <label for="dicomAeTitle" class="form-label">DICOM AETitle</label>
+                <input type="text" id="dicomAeTitle" name="dicomAeTitle" class="form-control" maxlength="20">
+            </div>
+        </div>
+
+        <div class="section-title">Worklist(RIS/HIS) 연동 정보</div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="worklistIp" class="form-label">Worklist IP</label>
+                <input type="text" id="worklistIp" name="worklistIp" class="form-control" maxlength="15">
+            </div>
+            <div class="col-md-4">
+                <label for="worklistPort" class="form-label">Worklist Port</label>
+                <input type="text" id="worklistPort" name="worklistPort" class="form-control" maxlength="10">
+            </div>
+            <div class="col-md-4">
+                <label for="worklistAeTitle" class="form-label">Worklist AETitle</label>
+                <input type="text" id="worklistAeTitle" name="worklistAeTitle" class="form-control" maxlength="20">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="equipmentText" class="form-label">비고 <span class="text-muted" style="font-size: 0.9em;">(선택)</span></label>
+                <input type="text" id="equipmentText" name="equipmentText" class="form-control" maxlength="50">
+            </div>
+        </div>
+
+        <input type="hidden" name="equipmentDel" value="N">
+        <input type="hidden" name="del" value="N">
+
+        <button type="submit" class="btn btn-primary w-100">등록</button>
+    </form>
+
+    <div class="mt-3 text-center">
+        <a th:href="@{/equipment}" class="btn btn-secondary">목록으로 돌아가기</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#departmentId').select2({
+            placeholder: "부서를 선택하세요",
+            allowClear: true
+        });
+    });
+</script>
+
+</body>
+</html>

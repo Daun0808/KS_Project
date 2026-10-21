@@ -4,7 +4,6 @@ import com.example.ks.toner.domain.Toner;
 import com.example.ks.toner.dto.CreateToner;
 import com.example.ks.toner.dto.UpdateToner;
 import com.example.ks.toner.repository.TonerRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,9 +11,12 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class TonerService {
     private final TonerRepository tonerRepository;
+
+    public TonerService(TonerRepository tonerRepository) {
+        this.tonerRepository = tonerRepository;
+    }
 
     public Toner findByTonerName(String tonerName) {
         return tonerRepository.findByTonerName(tonerName);

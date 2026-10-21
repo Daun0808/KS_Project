@@ -10,7 +10,6 @@ import com.example.ks.printHistory.dto.CreatePrinterHistory;
 import com.example.ks.printHistory.service.PrinterHistoryService;
 import com.example.ks.printerToner.service.PrinterTonerService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,12 +21,18 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class PrinterController {
     private final DepartmentService departmentService;
     private final PrinterService printerService;
     private final PrinterHistoryService printerHistoryService;
     private final PrinterTonerService printerTonerService;
+
+    public PrinterController(DepartmentService departmentService, PrinterService printerService, PrinterHistoryService printerHistoryService, PrinterTonerService printerTonerService) {
+        this.departmentService = departmentService;
+        this.printerService = printerService;
+        this.printerHistoryService = printerHistoryService;
+        this.printerTonerService = printerTonerService;
+    }
 
     @GetMapping("/printer")
     public ModelAndView printer() {

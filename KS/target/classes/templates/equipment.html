@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>의료장비 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #f8f9fa;
+            padding: 5px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-btn {
+            font-size: 1rem;
+            margin-right: 15px;
+        }
+
+        body {
+            padding-top: 60px;
+        }
+
+        td, th {
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .table td {
+            font-size: 0.9rem;
+        }
+
+        .table th {
+            font-size: 0.95rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+    </style>
+
+    <script>
+        function filterBySearchInputs() {
+            const floorInput = document.getElementById("floorSearch").value.toLowerCase();
+            const nameInput = document.getElementById("nameSearch").value.toLowerCase();
+            const placeInput = document.getElementById("placeSearch").value.toLowerCase();
+            const equipmentNameInput = document.getElementById("equipmentNameSearch").value.toLowerCase();
+            const rows = document.querySelectorAll("tbody tr");
+
+            rows.forEach(row => {
+                const floor = row.children[34].innerText.toLowerCase();
+                const name = row.children[27].innerText.toLowerCase();
+                const place = row.children[20].innerText.toLowerCase();
+                const equipmentName = row.children[36].innerText.toLowerCase();
+
+                const matches = floor.includes(floorInput) &&
+                    name.includes(nameInput) &&
+                    place.includes(placeInput) &&
+                    equipmentName.includes(equipmentNameInput);
+
+                row.style.display = matches ? "" : "none";
+            });
+        }
+
+        function filterByDelStatus() {
+            const showOnlyActive = document.getElementById("showActive").checked;
+            const rows = document.querySelectorAll("tbody tr");
+
+            let index = 1;
+            rows.forEach(row => {
+                const delStatus = row.getAttribute("data-del");
+                const isVisible = row.style.display !== "none";
+
+                if (isVisible && (!showOnlyActive || delStatus === "N")) {
+                    row.style.display = "";
+                    row.querySelector(".row-index").innerText = index++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        function filterTable() {
+            filterBySearchInputs();
+            filterByDelStatus();
+        }
+
+        window.onload = function () {
+            document.getElementById("showActive").checked = true;
+            filterTable();
+
+            const searchInputs = document.querySelectorAll("#floorSearch, #nameSearch, #placeSearch, #equipmentNameSearch");
+            searchInputs.forEach(input => {
+                input.addEventListener("keydown", function (event) {
+                    if (event.key === "Enter") {
+                        filterTable();
+                    }
+                });
+            });
+        };
+    </script>
+</head>
+<body>
+<div class="navbar-fixed">
+    <div class="container d-flex justify-content-start">
+        <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+        <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+        <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+        <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+        <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+        <a href="/toner/history/summary" class="btn btn-outline-warning navbar-btn">부서별 사용량 통계</a>
+        <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+        <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+        <a href="/equipment" class="btn btn-outline-dark navbar-btn">의료장비 관리</a>
+        <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">의료장비 목록</h2>
+
+    <div class="row mb-3">
+        <div class="col-md-2">
+            <div class="form-check">
+                <input type="checkbox" id="showActive" class="form-check-input" onclick="filterTable()" checked>
+                <label for="showActive" class="form-check-label">폐기 안된 장비 보기</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-1">
+            <input type="text" id="floorSearch" class="form-control" placeholder="층 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="nameSearch" class="form-control" placeholder="부서 이름 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="placeSearch" class="form-control" placeholder="설치 장소 검색">
+        </div>
+        <div class="col-md-2">
+            <input type="text" id="equipmentNameSearch" class="form-control" placeholder="장비명 검색">
+        </div>
+        <div class="col-md-2 text-end">
+            <a th:href="@{/equipment/create}">
+                <button class="btn btn-primary">의료장비 등록</button>
+            </a>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr>
+                <th>번호</th>
+                <th>자산관리번호</th>
+                <th>장비구분</th>
+                <th>자산코드분류</th>
+                <th>장비번호</th>
+                <th>품목분류명</th>
+                <th>품목세분류명</th>
+                <th>일련번호</th>
+                <th>급여적용일자</th>
+                <th>제품명</th>
+                <th>품목명 및 형명[모델명]</th>
+                <th>허가(신고)번호</th>
+                <th>분류번호</th>
+                <th>등급</th>
+                <th>업소허가번호</th>
+                <th>구분</th>
+                <th>제조국가</th>
+                <th>제조회사</th>
+                <th>제조년월</th>
+                <th>제조번호</th>
+                <th>설치장소</th>
+                <th>도입형태</th>
+                <th>구입처</th>
+                <th>금액(원)</th>
+                <th>신규/중고 구분</th>
+                <th>구입일자</th>
+                <th>장비 고유번호</th>
+                <th>관리부서</th>
+                <th>표준코드</th>
+                <th>장비구매가</th>
+                <th>고/저위험</th>
+                <th>정기점검 일시</th>
+                <th>유지보수 기간</th>
+                <th>점검업체</th>
+                <th>층</th>
+                <th>배치일</th>
+                <th>장비명</th>
+                <th>용도</th>
+                <th>생산년도</th>
+                <th>장비 IP</th>
+                <th>장비 AETitle</th>
+                <th>DICOM IP</th>
+                <th>DICOM AETitle</th>
+                <th>Worklist IP</th>
+                <th>Worklist AETitle</th>
+                <th>폐기 여부</th>
+                <th>비고</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="equipment, iterStat : ${equipments}" th:attr="data-del=${equipment.equipmentDel}">
+                <td class="row-index" th:text="${iterStat.index + 1}">1</td>
+                <td th:text="${equipment.assetManagementNumber}">자산관리번호</td>
+                <td th:text="${equipment.equipmentType}">장비구분</td>
+                <td th:text="${equipment.assetCodeClassification}">자산코드분류</td>
+                <td th:text="${equipment.equipmentNumber}">장비번호</td>
+                <td th:text="${equipment.itemClassificationName}">품목분류명</td>
+                <td th:text="${equipment.itemSubClassificationName}">품목세분류명</td>
+                <td th:text="${equipment.equipmentSerialNumber}">일련번호</td>
+                <td th:text="${equipment.insuranceApplicationDate}">급여적용일자</td>
+                <td th:text="${equipment.mfdsProductName}">제품명</td>
+                <td th:text="${equipment.itemNameModel}">품목명 및 형명[모델명]</td>
+                <td th:text="${equipment.permitReportNumber}">허가(신고)번호</td>
+                <td th:text="${equipment.mfdsClassificationNumber}">분류번호</td>
+                <td th:text="${equipment.mfdsGrade}">등급</td>
+                <td th:text="${equipment.businessPermitNumber}">업소허가번호</td>
+                <td th:text="${equipment.division}">구분</td>
+                <td th:text="${equipment.manufacturingCountry}">제조국가</td>
+                <td th:text="${equipment.equipmentMaker}">제조회사</td>
+                <td th:text="${equipment.manufactureYearMonth}">제조년월</td>
+                <td th:text="${equipment.manufacturingNumber}">제조번호</td>
+                <td th:text="${equipment.equipmentPlace}">설치장소</td>
+                <td th:text="${equipment.acquisitionType}">도입형태</td>
+                <td th:text="${equipment.purchaseSource}">구입처</td>
+                <td th:text="${equipment.purchaseAmount}">금액(원)</td>
+                <td th:text="${equipment.newUsedDivision}">신규/중고 구분</td>
+                <td th:text="${equipment.equipmentBuyDate}">구입일자</td>
+                <td th:text="${equipment.equipmentUniqueNumber}">장비 고유번호</td>
+                <td th:text="${equipment.department.departmentName}">관리부서</td>
+                <td th:text="${equipment.standardCode}">표준코드</td>
+                <td th:text="${equipment.equipmentPurchasePrice}">장비구매가</td>
+                <td th:text="${equipment.riskLevel}">고/저위험</td>
+                <td th:text="${equipment.regularInspectionDate}">정기점검 일시</td>
+                <td th:text="${equipment.maintenancePeriod}">유지보수 기간</td>
+                <td th:text="${equipment.inspectionCompany}">점검업체</td>
+                <td th:text="${equipment.department.departmentFloor}">층</td>
+                <td th:text="${equipment.equipmentPlaceDate}">배치일</td>
+                <td>
+                    <a th:href="@{/equipment/{equipment_id}(equipment_id=${equipment.equipmentId})}">
+                        <span th:text="${equipment.equipmentName}">장비명</span>
+                    </a>
+                </td>
+                <td th:text="${equipment.equipmentPurpose}">용도</td>
+                <td th:text="${equipment.equipmentProductDate}">생산년도</td>
+                <td th:text="${equipment.equipmentIp}">장비 IP</td>
+                <td th:text="${equipment.equipmentAeTitle}">장비 AETitle</td>
+                <td th:text="${equipment.dicomIp}">DICOM IP</td>
+                <td th:text="${equipment.dicomAeTitle}">DICOM AETitle</td>
+                <td th:text="${equipment.worklistIp}">Worklist IP</td>
+                <td th:text="${equipment.worklistAeTitle}">Worklist AETitle</td>
+                <td th:text="${equipment.equipmentDel}">폐기여부</td>
+                <td th:text="${equipment.equipmentText}">비고</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

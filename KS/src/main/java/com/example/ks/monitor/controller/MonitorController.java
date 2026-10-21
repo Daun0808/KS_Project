@@ -7,7 +7,6 @@ import com.example.ks.monitor.dto.CreateMonitor;
 import com.example.ks.monitor.dto.UpdateMonitor;
 import com.example.ks.monitor.service.MonitorService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,11 +16,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class MonitorController {
 
     private final MonitorService monitorService;
     private final DepartmentService departmentService;
+
+    public MonitorController(MonitorService monitorService, DepartmentService departmentService) {
+        this.monitorService = monitorService;
+        this.departmentService = departmentService;
+    }
 
     @GetMapping("/monitor")
     public ModelAndView monitorList() {

@@ -7,7 +7,6 @@ import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerMonth.domain.TonerMonth;
 import com.example.ks.tonerMonth.service.TonerMonthService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,11 +16,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class TonerController {
 
     private final TonerService tonerService;
     private final TonerMonthService tonerMonthService;
+
+    public TonerController(TonerService tonerService, TonerMonthService tonerMonthService) {
+        this.tonerService = tonerService;
+        this.tonerMonthService = tonerMonthService;
+    }
 
     // 토너 목록 조회
     @GetMapping("/toner")

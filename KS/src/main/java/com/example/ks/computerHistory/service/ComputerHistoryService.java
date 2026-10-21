@@ -5,7 +5,6 @@ import com.example.ks.computerHistory.domain.ComputerHistory;
 import com.example.ks.computerHistory.dto.CreateComputerHistory;
 import com.example.ks.computerHistory.dto.UpdateComputerHistory;
 import com.example.ks.computerHistory.repository.ComputerHistoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +14,13 @@ import java.util.Objects;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ComputerHistoryService {
 
     private final ComputerHistoryRepository computerHistoryRepository;
+
+    public ComputerHistoryService(ComputerHistoryRepository computerHistoryRepository) {
+        this.computerHistoryRepository = computerHistoryRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<ComputerHistory> findByComputer_ComputerId(int computerId) {

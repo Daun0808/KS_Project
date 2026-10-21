@@ -7,7 +7,6 @@ import com.example.ks.print.domain.Printer;
 import com.example.ks.print.dto.CreatePrinter;
 import com.example.ks.print.dto.UpdatePrinter;
 import com.example.ks.print.repository.PrinterRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +15,14 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class PrinterService {
     private final PrinterRepository printerRepository;
     private final DepartmentRepository departmentRepository;
+
+    public PrinterService(PrinterRepository printerRepository, DepartmentRepository departmentRepository) {
+        this.printerRepository = printerRepository;
+        this.departmentRepository = departmentRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Printer> findAll() {

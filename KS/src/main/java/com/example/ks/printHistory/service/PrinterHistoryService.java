@@ -6,7 +6,6 @@ import com.example.ks.printHistory.domain.PrinterHistory;
 import com.example.ks.printHistory.dto.CreatePrinterHistory;
 import com.example.ks.printHistory.dto.UpdatePrinterHistory;
 import com.example.ks.printHistory.repository.PrinterHistoryRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +13,14 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class PrinterHistoryService {
     private final PrinterHistoryRepository printerHistoryRepository;
     private final PrinterRepository printerRepository;
+
+    public PrinterHistoryService(PrinterHistoryRepository printerHistoryRepository, PrinterRepository printerRepository) {
+        this.printerHistoryRepository = printerHistoryRepository;
+        this.printerRepository = printerRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<PrinterHistory> findByPrinter_PrinterId(int printerId) {

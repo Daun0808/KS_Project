@@ -13,7 +13,6 @@ import com.example.ks.tonerMonth.domain.TonerMonth;
 import com.example.ks.tonerMonth.dto.UpdateTonerMonth;
 import com.example.ks.tonerMonth.repository.TonerMonthRepository;
 import com.example.ks.tonerMonth.service.TonerMonthService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +23,20 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class TonerHistoryService {
     private final TonerHistoryRepository tonerHistoryRepository;
     private final TonerRepository tonerRepository;
     private final TonerService tonerService;
     private final TonerMonthService tonerMonthService;
     private final TonerMonthRepository tonerMonthRepository;
+
+    public TonerHistoryService(TonerHistoryRepository tonerHistoryRepository, TonerRepository tonerRepository, TonerService tonerService, TonerMonthService tonerMonthService, TonerMonthRepository tonerMonthRepository) {
+        this.tonerHistoryRepository = tonerHistoryRepository;
+        this.tonerRepository = tonerRepository;
+        this.tonerService = tonerService;
+        this.tonerMonthService = tonerMonthService;
+        this.tonerMonthRepository = tonerMonthRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<TonerHistory> findByToner_TonerId(int tonerId) {

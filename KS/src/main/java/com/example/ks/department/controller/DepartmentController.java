@@ -4,7 +4,6 @@ import com.example.ks.department.domain.Department;
 import com.example.ks.department.dto.request.CreateDepartment;
 import com.example.ks.department.service.DepartmentService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,10 +12,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class DepartmentController {
 
     private final DepartmentService departmentService;
+
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
 
     @GetMapping("/department")
     public ModelAndView findAll() {

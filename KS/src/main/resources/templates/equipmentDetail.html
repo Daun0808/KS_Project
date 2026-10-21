@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>의료장비 상세 정보</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: #f8f9fa;
+      padding: 5px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-btn {
+      font-size: 1rem;
+      margin-right: 15px;
+    }
+
+    body {
+      padding-top: 60px;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar-fixed">
+  <div class="container d-flex justify-content-start">
+    <a href="/" class="btn btn-outline-primary navbar-btn">홈</a>
+    <a href="/department" class="btn btn-outline-success navbar-btn">부서 관리</a>
+    <a href="/printer" class="btn btn-outline-danger navbar-btn">프린터 관리</a>
+    <a href="/toner" class="btn btn-outline-warning navbar-btn">토너 관리</a>
+    <a href="/toner/month" class="btn btn-outline-warning navbar-btn">월별 토너 재고</a>
+    <a href="/toner/history/summary" class="btn btn-outline-warning navbar-btn">부서별 사용량 통계</a>
+    <a href="/computer" class="btn btn-outline-info navbar-btn">컴퓨터 관리</a>
+    <a href="/monitor" class="btn btn-outline-secondary navbar-btn">모니터 관리</a>
+    <a href="/equipment" class="btn btn-outline-dark navbar-btn">의료장비 관리</a>
+    <a href="/logs" class="btn btn-outline-dark navbar-btn">서버 로그</a>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">의료장비 상세 정보</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">장비명: <span th:text="${equipment.equipmentName}"></span></h5>
+
+      <h6>자산 기본 정보</h6>
+      <p class="card-text"><strong>자산관리번호:</strong> <span th:text="${equipment.assetManagementNumber}"></span></p>
+      <p class="card-text"><strong>장비구분:</strong> <span th:text="${equipment.equipmentType}"></span></p>
+      <p class="card-text"><strong>자산코드분류:</strong> <span th:text="${equipment.assetCodeClassification}"></span></p>
+      <p class="card-text"><strong>장비번호:</strong> <span th:text="${equipment.equipmentNumber}"></span></p>
+      <p class="card-text"><strong>품목분류명:</strong> <span th:text="${equipment.itemClassificationName}"></span></p>
+      <p class="card-text"><strong>품목세분류명:</strong> <span th:text="${equipment.itemSubClassificationName}"></span></p>
+      <p class="card-text"><strong>급여적용일자:</strong> <span th:text="${equipment.insuranceApplicationDate}"></span></p>
+
+      <hr>
+      <h6>식약처정보</h6>
+      <p class="card-text"><strong>제품명:</strong> <span th:text="${equipment.mfdsProductName}"></span></p>
+      <p class="card-text"><strong>품목명 및 형명[모델명]:</strong> <span th:text="${equipment.itemNameModel}"></span></p>
+      <p class="card-text"><strong>허가(신고)번호:</strong> <span th:text="${equipment.permitReportNumber}"></span></p>
+      <p class="card-text"><strong>분류번호:</strong> <span th:text="${equipment.mfdsClassificationNumber}"></span></p>
+      <p class="card-text"><strong>등급:</strong> <span th:text="${equipment.mfdsGrade}"></span></p>
+      <p class="card-text"><strong>업소허가번호:</strong> <span th:text="${equipment.businessPermitNumber}"></span></p>
+      <p class="card-text"><strong>구분:</strong> <span th:text="${equipment.division}"></span></p>
+
+      <hr>
+      <h6>장비제조사항</h6>
+      <p class="card-text"><strong>제조국가:</strong> <span th:text="${equipment.manufacturingCountry}"></span></p>
+      <p class="card-text"><strong>제조년월:</strong> <span th:text="${equipment.manufactureYearMonth}"></span></p>
+      <p class="card-text"><strong>제조번호:</strong> <span th:text="${equipment.manufacturingNumber}"></span></p>
+
+      <hr>
+      <h6>구입세부사항</h6>
+      <p class="card-text"><strong>도입형태:</strong> <span th:text="${equipment.acquisitionType}"></span></p>
+      <p class="card-text"><strong>구입처:</strong> <span th:text="${equipment.purchaseSource}"></span></p>
+      <p class="card-text"><strong>금액(원):</strong> <span th:text="${equipment.purchaseAmount}"></span></p>
+      <p class="card-text"><strong>신규/중고 구분:</strong> <span th:text="${equipment.newUsedDivision}"></span></p>
+
+      <hr>
+      <h6>기타</h6>
+      <p class="card-text"><strong>표준코드:</strong> <span th:text="${equipment.standardCode}"></span></p>
+      <p class="card-text"><strong>장비구매가:</strong> <span th:text="${equipment.equipmentPurchasePrice}"></span></p>
+      <p class="card-text"><strong>고/저위험:</strong> <span th:text="${equipment.riskLevel}"></span></p>
+      <p class="card-text"><strong>정기점검 일시:</strong> <span th:text="${equipment.regularInspectionDate}"></span></p>
+      <p class="card-text"><strong>유지보수 기간:</strong> <span th:text="${equipment.maintenancePeriod}"></span></p>
+      <p class="card-text"><strong>점검업체:</strong> <span th:text="${equipment.inspectionCompany}"></span></p>
+
+      <hr>
+      <h6>기본 정보</h6>
+      <p class="card-text"><strong>설치 장소:</strong> <span th:text="${equipment.equipmentPlace}"></span></p>
+      <p class="card-text"><strong>설치일:</strong> <span th:text="${equipment.equipmentPlaceDate}"></span></p>
+      <p class="card-text"><strong>제조사:</strong> <span th:text="${equipment.equipmentMaker}"></span></p>
+      <p class="card-text"><strong>용도:</strong> <span th:text="${equipment.equipmentPurpose}"></span></p>
+      <p class="card-text"><strong>생산년도:</strong> <span th:text="${equipment.equipmentProductDate}"></span></p>
+      <p class="card-text"><strong>구입일:</strong> <span th:text="${equipment.equipmentBuyDate}"></span></p>
+      <p class="card-text"><strong>시리얼 번호:</strong> <span th:text="${equipment.equipmentSerialNumber}"></span></p>
+      <p class="card-text"><strong>원내 고유번호:</strong> <span th:text="${equipment.equipmentUniqueNumber}"></span></p>
+
+      <hr>
+      <h6>장비 네트워크 정보 (로컬 AE)</h6>
+      <p class="card-text"><strong>장비 IP:</strong> <span th:text="${equipment.equipmentIp}"></span></p>
+      <p class="card-text"><strong>장비 Port:</strong> <span th:text="${equipment.equipmentPort}"></span></p>
+      <p class="card-text"><strong>장비 AETitle:</strong> <span th:text="${equipment.equipmentAeTitle}"></span></p>
+
+      <hr>
+      <h6>DICOM(PACS) 연동 정보</h6>
+      <p class="card-text"><strong>DICOM IP:</strong> <span th:text="${equipment.dicomIp}"></span></p>
+      <p class="card-text"><strong>DICOM Port:</strong> <span th:text="${equipment.dicomPort}"></span></p>
+      <p class="card-text"><strong>DICOM AETitle:</strong> <span th:text="${equipment.dicomAeTitle}"></span></p>
+
+      <hr>
+      <h6>Worklist(RIS/HIS) 연동 정보</h6>
+      <p class="card-text"><strong>Worklist IP:</strong> <span th:text="${equipment.worklistIp}"></span></p>
+      <p class="card-text"><strong>Worklist Port:</strong> <span th:text="${equipment.worklistPort}"></span></p>
+      <p class="card-text"><strong>Worklist AETitle:</strong> <span th:text="${equipment.worklistAeTitle}"></span></p>
+
+      <hr>
+      <p class="card-text"><strong>비고:</strong> <span th:text="${equipment.equipmentText}"></span></p>
+      <p class="card-text"><strong>폐기 상태:</strong> <span th:text="${equipment.equipmentDel}"></span></p>
+      <p class="card-text"><strong>폐기 일자:</strong> <span th:text="${equipment.equipmentDelDate}"></span></p>
+      <p class="card-text"><strong>폐기 사유:</strong> <span th:text="${equipment.equipmentDelText}"></span></p>
+      <p class="card-text"><strong>플래그 값:</strong> <span th:text="${equipment.del}"></span></p>
+      <hr>
+      <p class="card-text"><strong>소속 부서:</strong>
+        <a th:href="@{/department/{id}(id=${equipment.department.departmentId})}"
+           th:text="${equipment.department.departmentName + ' (' + equipment.department.departmentFloor + '층)'}"></a>
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="/equipment" class="btn btn-secondary">목록으로 돌아가기</a>
+    <a th:href="@{/equipment/update/{equipment_id}(equipment_id=${equipment_id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/equipment/{equipment_id}/history(equipment_id=${equipment_id})}" class="btn btn-info">히스토리</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

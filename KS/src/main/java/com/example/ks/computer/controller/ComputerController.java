@@ -12,7 +12,6 @@ import com.example.ks.monitor.domain.Monitor;
 import com.example.ks.monitor.service.MonitorService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,12 +27,17 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class ComputerController {
 
     private final ComputerService computerService;
     private final DepartmentService departmentService;
     private final MonitorService monitorService;
+
+    public ComputerController(ComputerService computerService, DepartmentService departmentService, MonitorService monitorService) {
+        this.computerService = computerService;
+        this.departmentService = departmentService;
+        this.monitorService = monitorService;
+    }
 
 
     @GetMapping("/computer")

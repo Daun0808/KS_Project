@@ -5,7 +5,6 @@ import com.example.ks.toner.service.TonerService;
 import com.example.ks.tonerMonth.domain.TonerMonth;
 import com.example.ks.tonerMonth.dto.CreateTonerMonthList;
 import com.example.ks.tonerMonth.service.TonerMonthService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,11 +19,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequiredArgsConstructor
 public class TonerMonthController {
 
     private final TonerMonthService tonerMonthService;
     private final TonerService tonerService;
+
+    public TonerMonthController(TonerMonthService tonerMonthService, TonerService tonerService) {
+        this.tonerMonthService = tonerMonthService;
+        this.tonerService = tonerService;
+    }
 
     @GetMapping("/toner/month")
     public ModelAndView viewTonerMonth(@RequestParam(value = "date", required = false) String dateString) {

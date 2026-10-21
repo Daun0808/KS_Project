@@ -7,7 +7,6 @@ import com.example.ks.computerHistory.dto.UpdateComputerHistory;
 import com.example.ks.computerHistory.service.ComputerHistoryService;
 import com.example.ks.department.service.DepartmentService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,12 +15,17 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class ComputerHistoryController {
 
     private final ComputerHistoryService computerHistoryService;
     private final ComputerService computerService;
     private final DepartmentService departmentService;
+
+    public ComputerHistoryController(ComputerHistoryService computerHistoryService, ComputerService computerService, DepartmentService departmentService) {
+        this.computerHistoryService = computerHistoryService;
+        this.computerService = computerService;
+        this.departmentService = departmentService;
+    }
 
     // 특정 컴퓨터의 이력 조회 (설치일 / 부서이동)
     @GetMapping("/computer/{computer_id}/history")

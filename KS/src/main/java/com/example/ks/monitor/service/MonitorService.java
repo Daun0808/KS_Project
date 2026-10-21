@@ -7,7 +7,6 @@ import com.example.ks.monitor.domain.Monitor;
 import com.example.ks.monitor.dto.CreateMonitor;
 import com.example.ks.monitor.dto.UpdateMonitor;
 import com.example.ks.monitor.repository.MonitorRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +15,15 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class MonitorService {
 
     private final MonitorRepository monitorRepository;
     private final DepartmentRepository departmentRepository;
+
+    public MonitorService(MonitorRepository monitorRepository, DepartmentRepository departmentRepository) {
+        this.monitorRepository = monitorRepository;
+        this.departmentRepository = departmentRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Monitor> findAll() {

@@ -7,7 +7,6 @@ import com.example.ks.printHistory.dto.CreatePrinterHistory;
 import com.example.ks.printHistory.dto.UpdatePrinterHistory;
 import com.example.ks.printHistory.service.PrinterHistoryService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,10 +15,14 @@ import java.util.List;
 
 @Controller
 @RequestMapping
-@RequiredArgsConstructor
 public class PrinterHistoryController {
     private final PrinterHistoryService printerHistoryService;
     private final PrinterService printerService;
+
+    public PrinterHistoryController(PrinterHistoryService printerHistoryService, PrinterService printerService) {
+        this.printerHistoryService = printerHistoryService;
+        this.printerService = printerService;
+    }
 
     @GetMapping("/printer/{printer_id}/history")
     public ModelAndView findAllByPrinter_PrinterId(@PathVariable("printer_id") int printerId) {

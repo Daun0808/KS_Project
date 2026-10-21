@@ -10,7 +10,6 @@ import com.example.ks.tonerHistory.dto.DepartmentTonerUsage;
 import com.example.ks.tonerHistory.dto.UpdateTonerHistory;
 import com.example.ks.tonerHistory.service.TonerHistoryService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +22,16 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/toner")
-@RequiredArgsConstructor
 public class TonerHistoryController {
     private final TonerHistoryService tonerHistoryService;
     private final TonerService tonerService;
     private final DepartmentService departmentService;
+
+    public TonerHistoryController(TonerHistoryService tonerHistoryService, TonerService tonerService, DepartmentService departmentService) {
+        this.tonerHistoryService = tonerHistoryService;
+        this.tonerService = tonerService;
+        this.departmentService = departmentService;
+    }
 
     // 특정 토너의 히스토리 조회
     @GetMapping("/{toner_id}/history")

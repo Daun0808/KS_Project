@@ -8,7 +8,6 @@ import com.example.ks.computer.repository.ComputerRepository;
 import com.example.ks.computerHistory.service.ComputerHistoryService;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.repository.DepartmentRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +18,17 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ComputerService {
 
     private final ComputerRepository computerRepository;
     private final DepartmentRepository departmentRepository;
     private final ComputerHistoryService computerHistoryService;
+
+    public ComputerService(ComputerRepository computerRepository, DepartmentRepository departmentRepository, ComputerHistoryService computerHistoryService) {
+        this.computerRepository = computerRepository;
+        this.departmentRepository = departmentRepository;
+        this.computerHistoryService = computerHistoryService;
+    }
 
     @Transactional(readOnly = true)
     public List<Computer> findAll() {

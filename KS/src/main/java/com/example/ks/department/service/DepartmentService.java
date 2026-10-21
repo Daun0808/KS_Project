@@ -4,7 +4,6 @@ package com.example.ks.department.service;
 import com.example.ks.department.domain.Department;
 import com.example.ks.department.dto.request.CreateDepartment;
 import com.example.ks.department.repository.DepartmentRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +12,12 @@ import java.util.Objects;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
+
+    public DepartmentService(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
 
     @Transactional(readOnly = true)
     public List<Department> findAll() {
